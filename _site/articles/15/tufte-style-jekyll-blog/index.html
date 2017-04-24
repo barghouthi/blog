@@ -34,7 +34,7 @@
 		
   	
 		
-		      <a href="/blog/">Notes</a>
+		      <a href="/blog/index.html">Notes</a>
 	    
   	
 		
@@ -65,7 +65,7 @@
 
 <h3 id="the-sass-settings-file">The SASS settings file</h3>
 
-<p>I have taken much of the actual <em>Tufte-css</em> files and modified them as necessary to accomodate the needs inherent in creating a Jekyll theme that has additional writing aids such as the Liquid tags. I have also turned the CSS file into a <a href="http://sass-lang.com">SASS</a> file (the .scss type).  This means that you can alter things like font choices, text color, background color, and underlining style by changing values in this file. When the Jekyll site is built using <code class="highlighter-rouge">jekyll build</code> the settings in this file will be compiled into the customized CSS file that the site uses.</p>
+<p>I have taken much of the actual <em>Tufte-css</em> files and modified them as necessary to accomodate the needs inherent in creating a Jekyll theme that has additional writing aids such as the Liquid tags. I have also turned the CSS file into a <a href="http://sass-lang.com">SASS</a> file (the .scss type).  This means that you can alter things like font choices, text color, background color, and underlining style by changing values in this file. When the Jekyll site is built using <code>jekyll build</code> the settings in this file will be compiled into the customized CSS file that the site uses.</p>
 
 <p>This file looks like this:</p>
 
@@ -84,42 +84,42 @@ $bg-color: #fffff8;
 $contrast-color: #a00000;
 $border-color: #333333;
 $link-style: color; // choices are ‘color’ or ‘underline’. Default is color using $contrast-color set above
-<code class="highlighter-rouge">
+<code>
 Any of these values can be changed in the</code>_sass/_settings.scss``` file before the site is built. The default values are the ones from <em>tufte-css</em>.</p>
 
 <h2 id="fundamentals">Fundamentals</h2>
 
 <h3 id="color">Color</h3>
 
-<p>Although paper handouts obviously have a pure white background, the web is better served by the use of slightly off-white and off-black colors. I picked <code class="highlighter-rouge">#fffff8</code> and <code class="highlighter-rouge">#111111</code> because they are nearly indistinguishable from their ‘pure’ cousins, but dial down the harsh contrast. Tufte’s books are a study in spare, minimalist design. In his book <a href="http://www.edwardtufte.com/tufte/books_vdqi">The Visual Display of Quantitative Information</a>, he uses a red ink to add some visual punctuation to the buff colored paper and dark ink. In that spirit, links are styled using a similar red color.</p>
+<p>Although paper handouts obviously have a pure white background, the web is better served by the use of slightly off-white and off-black colors. I picked <code>#fffff8</code> and <code>#111111</code> because they are nearly indistinguishable from their ‘pure’ cousins, but dial down the harsh contrast. Tufte’s books are a study in spare, minimalist design. In his book <a href="http://www.edwardtufte.com/tufte/books_vdqi">The Visual Display of Quantitative Information</a>, he uses a red ink to add some visual punctuation to the buff colored paper and dark ink. In that spirit, links are styled using a similar red color.</p>
 
 <h3 id="headings">Headings</h3>
 
-<p>Tufte CSS uses <code class="highlighter-rouge">&lt;h1&gt;</code> for the document title, <code class="highlighter-rouge">&lt;p&gt;</code> with class <code class="highlighter-rouge">code</code> for the document subtitle, <code class="highlighter-rouge">&lt;h2&gt;</code> for section headings, and <code class="highlighter-rouge">&lt;h3&gt;</code> for low-level headings. More specific headings are not encouraged. If you feel the urge to reach for a heading of level 4 or greater, consider redesigning your document:</p>
+<p>Tufte CSS uses <code>&lt;h1&gt;</code> for the document title, <code>&lt;p&gt;</code> with class <code>code</code> for the document subtitle, <code>&lt;h2&gt;</code> for section headings, and <code>&lt;h3&gt;</code> for low-level headings. More specific headings are not encouraged. If you feel the urge to reach for a heading of level 4 or greater, consider redesigning your document:</p>
 
 <blockquote>
   <p>[It is] notable that the Feynman lectures (3 volumes) write about all of physics in 1800 pages, using only 2 levels of hierarchical headings: chapters and A-level heads in the text. It also uses the methodology of <em>sentences</em> which then cumulate sequentially into <em>paragraphs</em>, rather than the grunts of bullet points. Undergraduate Caltech physics is very complicated material, but it didn’t require an elaborate hierarchy to organize.
 <cite><a href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB">http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB</a></cite></p>
 </blockquote>
 
-<p>As a bonus, this excerpt regarding the use of headings provides an example of using block quotes. Markdown does not have a native <code class="highlighter-rouge">&lt;cite&gt;</code> shorthand, but real html can be sprinkled in with the Markdown text. In the previous example, the <code class="highlighter-rouge">&lt;cite&gt;</code> was preceded with a single return after the quotation itself. The previous blockquote was written in Markdown thusly:</p>
+<p>As a bonus, this excerpt regarding the use of headings provides an example of using block quotes. Markdown does not have a native <code>&lt;cite&gt;</code> shorthand, but real html can be sprinkled in with the Markdown text. In the previous example, the <code>&lt;cite&gt;</code> was preceded with a single return after the quotation itself. The previous blockquote was written in Markdown thusly:</p>
 
-<p>&gt; <code class="highlighter-rouge">[It is] notable that the Feynman lectures (3 volumes) write about all of physics in 1800 pages, using only 2 levels of hierarchical headings: chapters and A-level heads in the text. It also uses the methodology of *sentences* which then cumulate sequentially into *paragraphs*, rather than the grunts of bullet points. Undergraduate Caltech physics is very complicated material, but it didn’t require an elaborate hierarchy to organize.</code>
-<code class="highlighter-rouge">&lt;cite&gt;[http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB](http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB)&lt;/cite&gt;</code></p>
+<p>&gt; <code>[It is] notable that the Feynman lectures (3 volumes) write about all of physics in 1800 pages, using only 2 levels of hierarchical headings: chapters and A-level heads in the text. It also uses the methodology of *sentences* which then cumulate sequentially into *paragraphs*, rather than the grunts of bullet points. Undergraduate Caltech physics is very complicated material, but it didn’t require an elaborate hierarchy to organize.</code>
+<code>&lt;cite&gt;[http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB](http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB)&lt;/cite&gt;</code></p>
 
-<p>Tufte CSS styles headings <code class="highlighter-rouge">h1</code>, <code class="highlighter-rouge">h2</code>, and <code class="highlighter-rouge">h3</code>, making them nearly identical except for font size. The <code class="highlighter-rouge">h1</code> should be used as a title, the <code class="highlighter-rouge">h2</code> for section headings, and <code class="highlighter-rouge">h3</code> for subsection headings.</p>
+<p>Tufte CSS styles headings <code>h1</code>, <code>h2</code>, and <code>h3</code>, making them nearly identical except for font size. The <code>h1</code> should be used as a title, the <code>h2</code> for section headings, and <code>h3</code> for subsection headings.</p>
 
 <p>While this Jekyll theme supports more specific headings, if you feel the urge to reach for a heading of level 4 or higher, consider redesigning your document.</p>
 
 <p><span class="newthought">In his later books</span> <label for="two" class="margin-toggle sidenote-number"></label><input type="checkbox" id="two" class="margin-toggle" /><span class="sidenote"><a href="http://www.edwardtufte.com/tufte/books_be">http://www.edwardtufte.com/tufte/books_be</a> </span>, Tufte starts each section with a bit of vertical space, a non-indented paragraph, and sets the first few words of the sentence in small caps. To accomplish this using this style, enclose the sentence fragment you want styled with small caps in a custom Liquid tag called ‘newthought’ like so:</p>
 
-<p><code class="highlighter-rouge">Liquid
+<p><code>Liquid
 {% newthought 'In his later books' %}
 </code></p>
 
 <h3 id="text">Text</h3>
 
-<p>In print, Tufte uses the proprietary Monotype Bembo<label for="3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="3" class="margin-toggle" /><span class="sidenote">See Tufte’s comment in the <a href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt">Tufte book fonts</a> thread. </span> font. A similar effect is achieved in digital formats with the now open-source ETBembo, which Tufte-Jekyll supplies with a <code class="highlighter-rouge">@font-face</code> reference to a .ttf file. Thanks to <a href="https://github.com/daveliepmann/tufte-css/commit/0a810a7d5f4707941c6f9fe99a53ec41f50a5c00">Linjie Ding</a>, italicized text uses the ETBembo Italic font instead of mechanically skewing the characters. In case ETBembo somehow doesn’t work, Tufte CSS degrades gracefully to other serif fonts like Palatino and Georgia. Notice that Tufte CSS includes separate font files for <strong>bold</strong> (strong) and <em>italic</em> (emphasis), instead of relying on the browser to mechanically transform the text. This is typographic best practice. It’s also really important. Thus concludes my unnecessary use of em and strong for the purpose of example.</p>
+<p>In print, Tufte uses the proprietary Monotype Bembo<label for="3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="3" class="margin-toggle" /><span class="sidenote">See Tufte’s comment in the <a href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt">Tufte book fonts</a> thread. </span> font. A similar effect is achieved in digital formats with the now open-source ETBembo, which Tufte-Jekyll supplies with a <code>@font-face</code> reference to a .ttf file. Thanks to <a href="https://github.com/daveliepmann/tufte-css/commit/0a810a7d5f4707941c6f9fe99a53ec41f50a5c00">Linjie Ding</a>, italicized text uses the ETBembo Italic font instead of mechanically skewing the characters. In case ETBembo somehow doesn’t work, Tufte CSS degrades gracefully to other serif fonts like Palatino and Georgia. Notice that Tufte CSS includes separate font files for <strong>bold</strong> (strong) and <em>italic</em> (emphasis), instead of relying on the browser to mechanically transform the text. This is typographic best practice. It’s also really important. Thus concludes my unnecessary use of em and strong for the purpose of example.</p>
 
 <p>Code snippets ape GitHub’s font selection using Microsoft’s <a href="http://www.microsoft.com/typography/ClearTypeFonts.mspx"><em>Consolas</em></a> and the sans-serif font uses Tufte’s choice of Gill Sans. Since this is not a free font, and some systems will not have it installed, the free google font <a href="https://www.google.com/fonts/specimen/Lato"><em>Lato</em></a> is designated as a fallback.</p>
 
@@ -141,9 +141,9 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <h3 id="margin-figures">Margin Figures</h3>
 
-<p><label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/blog/assets/img/rhino.png" /><br />F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” <em>Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice</em> (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s <em>Visual Explanations</em>.</span>Images and graphics play an integral role in Tufte’s work. To place figures in the margin, use the custom margin figure liquid tag included in the <code class="highlighter-rouge">_plugins</code> directory like so:</p>
+<p><label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/blog/assets/img/rhino.png" /><br />F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” <em>Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice</em> (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s <em>Visual Explanations</em>.</span>Images and graphics play an integral role in Tufte’s work. To place figures in the margin, use the custom margin figure liquid tag included in the <code>_plugins</code> directory like so:</p>
 
-<p><code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">marginfigure</span><span class="w"> </span><span class="err">'mf-id-whatever'</span><span class="w"> </span><span class="err">'assets/img/rhino.png'</span><span class="w"> </span><span class="err">'F.J.</span><span class="w"> </span><span class="err">Cole,</span><span class="w"> </span><span class="err">“The</span><span class="w"> </span><span class="err">History</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">Albrecht</span><span class="w"> </span><span class="err">Dürer’s</span><span class="w"> </span><span class="err">Rhinoceros</span><span class="w"> </span><span class="err">in</span><span class="w"> </span><span class="err">Zoological</span><span class="w"> </span><span class="err">Literature,”</span><span class="w"> </span><span class="err">*Science,</span><span class="w"> </span><span class="err">Medicine,</span><span class="w"> </span><span class="err">and</span><span class="w"> </span><span class="err">History:</span><span class="w"> </span><span class="err">Essays</span><span class="w"> </span><span class="err">on</span><span class="w"> </span><span class="err">the</span><span class="w"> </span><span class="err">Evolution</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">Scientific</span><span class="w"> </span><span class="err">Thought</span><span class="w"> </span><span class="err">and</span><span class="w"> </span><span class="err">Medical</span><span class="w"> </span><span class="err">Practice*</span><span class="w"> </span><span class="err">(London,</span><span class="w"> </span><span class="err">1953),</span><span class="w"> </span><span class="err">ed.</span><span class="w"> </span><span class="err">E.</span><span class="w"> </span><span class="err">Ashworth</span><span class="w"> </span><span class="err">Underwood,</span><span class="w"> </span><span class="err">337-356.</span><span class="w"> </span><span class="err">From</span><span class="w"> </span><span class="err">page</span><span class="w"> </span><span class="err">71</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">Edward</span><span class="w"> </span><span class="err">Tufte’s</span><span class="w"> </span><span class="err">*Visual</span><span class="w"> </span><span class="err">Explanations*.'</span><span class="w">  </span><span class="err">%</span><span class="p">}</span></code>.</p>
+<p><code>{% marginfigure 'mf-id-whatever' 'assets/img/rhino.png' 'F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” *Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice* (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s *Visual Explanations*.'  %}</code>.</p>
 
 <p>Note that this tag has <em>three</em> parameters. The first is an arbitrary id. This parameter can be named anything as long as it is unique to this post. The second parameter is the path to the image. And the final parameter is whatever caption you want to be displayed with the figure.  All parameters <em>must</em> be enclosed in quotes for this simple liquid tag to work!</p>
 
@@ -151,7 +151,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>If you need a full-width image or figure, another custom liquid tag is available to use. Oddly enough, it is named ‘fullwidth’, and this markup:</p>
 
-<p><code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">fullwidth</span><span class="w"> </span><span class="err">'assets/img/napoleons-march.png'</span><span class="w"> </span><span class="err">'Napoleon's</span><span class="w"> </span><span class="err">March</span><span class="w"> </span><span class="err">(Edward</span><span class="w"> </span><span class="err">Tufte’s</span><span class="w"> </span><span class="err">English</span><span class="w"> </span><span class="err">translation)'</span><span class="w">  </span><span class="err">%</span><span class="p">}</span></code></p>
+<p><code>{% fullwidth 'assets/img/napoleons-march.png' 'Napoleon's March (Edward Tufte’s English translation)'  %}</code></p>
 
 <p>Yields this:</p>
 
@@ -161,7 +161,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>Besides margin and full width figures, you can of course also include figures constrained to the main column. Yes, you guessed it, a custom liquid tag rides to the rescue once again:</p>
 
-<p><code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">maincolumn</span><span class="w"> </span><span class="err">'assets/img/export-imports.png'</span><span class="w"> </span><span class="err">'From</span><span class="w"> </span><span class="err">Edward</span><span class="w"> </span><span class="err">Tufte,</span><span class="w"> </span><span class="err">*Visual</span><span class="w"> </span><span class="err">Display</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">Quantitative</span><span class="w"> </span><span class="err">Information*,</span><span class="w"> </span><span class="err">page</span><span class="w"> </span><span class="err">92'</span><span class="w">  </span><span class="err">%</span><span class="p">}</span></code></p>
+<p><code>{% maincolumn 'assets/img/export-imports.png' 'From Edward Tufte, *Visual Display of Quantitative Information*, page 92'  %}</code></p>
 
 <p>yields this:</p>
 
@@ -177,13 +177,13 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>Sidenotes<label for="sn-id-whatever" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-whatever" class="margin-toggle" /><span class="sidenote">This is a sidenote and <em>displays a superscript</em> </span> display a superscript. The <em>sidenote</em> Liquid tag contains two components. The first is an identifier allowing the sidenote to be targeted by the twitchy index fingers of mobile device users so that all the yummy sidenote goodness is revealed when the superscript is tapped. The second components is the actual content of the sidenote. Both of these components should be enclosed in single quotes. Note that we are using the CSS ‘counter’ trick to automagically keep track of the number sequence on each page or post. On small screens, the sidenotes disappear and when the superscript is clicked, a side note will open below the content, which can then be closed with a similar click. Here is the markup for the sidenote at the beginning of this paragraph:</p>
 
-<p><code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">sidenote</span><span class="w"> </span><span class="err">'sn-id-whatever'</span><span class="w"> </span><span class="err">'This</span><span class="w"> </span><span class="err">is</span><span class="w"> </span><span class="err">a</span><span class="w"> </span><span class="err">sidenote</span><span class="w"> </span><span class="err">and</span><span class="w"> </span><span class="err">*displays</span><span class="w"> </span><span class="err">a</span><span class="w"> </span><span class="err">superscript*'%</span><span class="p">}</span></code></p>
+<p><code>{% sidenote 'sn-id-whatever' 'This is a sidenote and *displays a superscript*'%}</code></p>
 
 <h3 id="margin-notes">Margin notes</h3>
 
 <p>Margin notes<label for="mn-id-whatever" class="margin-toggle"> ⊕</label><input type="checkbox" id="mn-id-whatever" class="margin-toggle" /><span class="marginnote">This is a margin note <em>without</em> a superscript </span> are similar to sidenotes, but do not display a superscript. The <em>marginnnote</em> Liquid tags has the same two components as the <em>sidenote</em> tag. Anything can be placed in a margin note. Well, anything that is an inline element. Block level elements can make the Kramdown parser do strange things. On small screens, the margin notes disappear and this symbol: <span class="contrast ">⊕</span> pops up. When clicked, it will open the margin note below the content, which can then be closed with a similar click. The Markdown content has a similar sort of markup as a sidenote, but without a number involved:</p>
 
-<p><code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">marginnote</span><span class="w"> </span><span class="err">'mn-id-whatever'</span><span class="w"> </span><span class="err">'This</span><span class="w"> </span><span class="err">is</span><span class="w"> </span><span class="err">a</span><span class="w"> </span><span class="err">margin</span><span class="w"> </span><span class="err">note</span><span class="w"> </span><span class="err">*without*</span><span class="w"> </span><span class="err">a</span><span class="w"> </span><span class="err">superscript'</span><span class="w"> </span><span class="err">%</span><span class="p">}</span></code></p>
+<p><code>{% marginnote 'mn-id-whatever' 'This is a margin note *without* a superscript' %}</code></p>
 
 <h2 id="equations">Equations</h2>
 
@@ -195,7 +195,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>is written by enclosing a Mathjax expression with a <em>Liquid inline tag pair</em> (‘m’ and ‘em’) like so:</p>
 
-<p><code class="highlighter-rouge">When {% m %} a \ne 0{% em %}, there are two solutions to {% m %}ax^2 + bx + c = 0{% em %}</code></p>
+<p><code>When {% m %} a \ne 0{% em %}, there are two solutions to {% m %}ax^2 + bx + c = 0{% em %}</code></p>
 
 <p>Similarly, this block-level Mathjax expression:</p>
 
@@ -203,7 +203,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>is written by enclosing the expression with a <em>Liquid block tag pair</em> (‘math’ and ‘endmath’) like so:</p>
 
-<p><code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">math</span><span class="w"> </span><span class="err">%</span><span class="p">}</span><span class="err">x</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="p">{</span><span class="err">-b</span><span class="w"> </span><span class="err">\pm</span><span class="w"> </span><span class="err">\sqrt{b^2-4ac</span><span class="p">}</span><span class="w"> </span><span class="err">\over</span><span class="w"> </span><span class="mi">2</span><span class="err">a}.</span><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">endmath</span><span class="w">  </span><span class="err">%</span><span class="p">}</span></code></p>
+<p><code>{% math %}x = {-b \pm \sqrt{b^2-4ac} \over 2a}.{% endmath  %}</code></p>
 
 <p>You can get pretty fancy, for instance, the wave equation’s nabla is no big thing:</p>
 
@@ -219,9 +219,9 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>Tables are, frankly,  a pain in the ass to create. That said, they often are one of the best methods for presenting data. Tabular data are normally presented with right-aligned numbers, left-aligned text, and minimal grid lines.</p>
 
-<p>Note that when writing Jekyll Markdown content, there will often be a need to get some dirt under your fingernails and stoop to writing a little honest-to-god html. Yes, all that hideous <code class="highlighter-rouge">&lt;table&gt;..&lt;thead&gt;..&lt;th&gt;</code> nonsense. <em>And</em> you must wrap the unholy mess in a <code class="highlighter-rouge">&lt;div class="table-wrapper"&gt;</code> tag to ensure that the table stays centered in the main content column.</p>
+<p>Note that when writing Jekyll Markdown content, there will often be a need to get some dirt under your fingernails and stoop to writing a little honest-to-god html. Yes, all that hideous <code>&lt;table&gt;..&lt;thead&gt;..&lt;th&gt;</code> nonsense. <em>And</em> you must wrap the unholy mess in a <code>&lt;div class="table-wrapper"&gt;</code> tag to ensure that the table stays centered in the main content column.</p>
 
-<p>Tables are designed with an <code class="highlighter-rouge">overflow:scroll</code> property to create slider bars when the viewport is narrow. This is so that you do not collapse all your beautiful data into a jumble of letters and numbers when you view it on your smartphone.</p>
+<p>Tables are designed with an <code>overflow:scroll</code> property to create slider bars when the viewport is narrow. This is so that you do not collapse all your beautiful data into a jumble of letters and numbers when you view it on your smartphone.</p>
 
 <p><label for="table-1-id" class="margin-toggle"> ⊕</label><input type="checkbox" id="table-1-id" class="margin-toggle" /><span class="marginnote"><em>Table 1</em>: A table with default style formatting </span></p>
 <div class="table-wrapper">
@@ -284,7 +284,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>This is not the One True Table. Such a style does not exist. One must craft each data table with custom care to the narrative one is telling with that specific data. So take this not as “the table style to use”, but rather as “a table style to start from”. From here, use principles to guide you: avoid chartjunk, optimize the data-ink ratio (“within reason”, as Tufte says), and “mobilize every graphical element, perhaps several times over, to show the data.<label for="table-id" class="margin-toggle sidenote-number"></label><input type="checkbox" id="table-id" class="margin-toggle" /><span class="sidenote">Page 139, <em>The Visual Display of Quantitative Information</em>, Edward Tufte 2001. </span> Furthermore, one must know when to reach for more complex data presentation tools, like a custom graphic or a JavaScript charting library.</p>
 
-<p>As an example of alternative table styles, academic publications written in <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> often rely on the <code class="highlighter-rouge">booktabs</code> package to produce clean, clear tables. Similar results can be achieved in Tufte CSS with the <code class="highlighter-rouge">booktabs</code> class, as demonstrated in this table:</p>
+<p>As an example of alternative table styles, academic publications written in <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> often rely on the <code>booktabs</code> package to produce clean, clear tables. Similar results can be achieved in Tufte CSS with the <code>booktabs</code> class, as demonstrated in this table:</p>
 
 <p><label for="table-2-id" class="margin-toggle"> ⊕</label><input type="checkbox" id="table-2-id" class="margin-toggle" /><span class="marginnote"><em>Table 2</em>: A table with booktabs style formatting </span></p>
 <div class="table-wrapper">
@@ -379,7 +379,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>Using the following markup(down):</p>
 
-<p><code class="highlighter-rouge">
+<p><code>
 |                 |mpg  | cyl  |  disp  |   hp   |  drat  | wt  |
 |:----------------|----:|-----:|-------:|-------:|-------:|----:|
 |Mazda RX4        |21   |6     |160     |110     |3.90    |2.62 |
@@ -431,9 +431,9 @@ etc..
 
 <h2 id="code">Code</h2>
 
-<p>Code samples use a monospace font using the ‘code’ class. The Kramdown parser has the ‘GFM’ option enabled, which stands for ‘Github Flavored Markdown’, and this means that both inline code such as <code class="highlighter-rouge">#include &lt;stdio.h&gt;</code> and blocks of code can be delimited by surrounding them with 3 backticks:</p>
+<p>Code samples use a monospace font using the ‘code’ class. The Kramdown parser has the ‘GFM’ option enabled, which stands for ‘Github Flavored Markdown’, and this means that both inline code such as <code>#include &lt;stdio.h&gt;</code> and blocks of code can be delimited by surrounding them with 3 backticks:</p>
 
-<p><code class="highlighter-rouge">
+<p><code>
 (map tufte-style all-the-things)
 </code>
 is created by the following markup:</p>
@@ -446,7 +446,7 @@ module Jekyll
   class RenderFullWidthTag &lt; Liquid::Tag
   require “shellwords”</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>def initialize(tag_name, text, tokens)
+<pre><code>def initialize(tag_name, text, tokens)
   super
   @text = text.shellsplit
 end
@@ -456,7 +456,6 @@ def render(context)
   "&lt;p&gt;&lt;span class='marginnote'&gt;#{@text[1]}&lt;/span&gt;&lt;/p&gt;"
 end   end end
 </code></pre>
-</div>
 
 <p>Liquid::Template.register_tag(‘fullwidth’, Jekyll::RenderFullWidthTag)
 ```</p>

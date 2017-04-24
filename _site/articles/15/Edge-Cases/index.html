@@ -34,7 +34,7 @@
 		
   	
 		
-		      <a href="/blog/">Notes</a>
+		      <a href="/blog/index.html">Notes</a>
 	    
   	
 		
@@ -70,12 +70,12 @@
 
 <h3 id="mathjax-improperly-parsing-greater-and-less-than-and-ampersands-inside-blocks">Mathjax improperly parsing greater and less than and ampersands inside blocks</h3>
 
-<p>The mathjax plugin has been modified to contain all the block style mathjax inside a <code class="highlighter-rouge">&lt;div class="mathblock"&gt;..&lt;/div&gt;</code> tag wrapper pair
+<p>The mathjax plugin has been modified to contain all the block style mathjax inside a <code>&lt;div class="mathblock"&gt;..&lt;/div&gt;</code> tag wrapper pair
 which fixes many of the issues with conflicts with the Kramdown parser. Some examples sent to me by Quxiaofeng are now parsing correctly, I believe.</p>
 
 <p>This code:</p>
 
-<p><code class="highlighter-rouge">latex
+<p><code>latex
 {% math  %}
   D = \left(\begin{matrix}
   1 &amp; -1 &amp; &amp; &amp; &amp; \\
@@ -171,9 +171,8 @@ D = \left(\begin{matrix}
 <p>```
     + list item 1</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> + list item 2 ```
+<pre><code> + list item 2 ```
 </code></pre>
-</div>
 
 <p>It will create an html tag structure like this:</p>
 
@@ -191,7 +190,7 @@ Which <em>totally</em> goofs up the layout CSS.</p>
 
 <p>However, if your Markdown is this:</p>
 
-<p><code class="highlighter-rouge">
+<p><code>
     + list item 1
      + list item 2
 </code></p>
@@ -230,7 +229,7 @@ Which <em>totally</em> goofs up the layout CSS.</p>
 
 <p>Example of the proper way to write an url inside a Liquid full-width image tag.</p>
 
-<p>This code: <code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">fullwidth</span><span class="w"> </span><span class="nt">"assets/img/rhino.png"</span><span class="w"> </span><span class="nt">"Tufte pet rhino (via &lt;a href=\"//www.edwardtufte.com/tufte/\"&gt;Edward Tufte&lt;/a&gt;)"</span><span class="w">  </span><span class="err">%}</span></code></p>
+<p>This code: <code>{% fullwidth "assets/img/rhino.png" "Tufte pet rhino (via &lt;a href=\"//www.edwardtufte.com/tufte/\"&gt;Edward Tufte&lt;/a&gt;)"  %}</code></p>
 
 <figure class="fullwidth"><img src="/blog/assets/img/rhino.png" /><figcaption>Tufte's pet rhino (via <a href="//www.edwardtufte.com/tufte/">Edward Tufte</a>)</figcaption></figure>
 
