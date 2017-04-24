@@ -18,12 +18,12 @@
     <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
-  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
-  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+  <link rel="stylesheet" type="text/css" href="/blog/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/blog/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="barghouthi.github.io/articles/15/tufte-style-jekyll-blog">
+  <link rel="canonical" href="/blog/articles/15/tufte-style-jekyll-blog">
 
-  <link rel="alternate" type="application/rss+xml" title="Aws's Notes" href="barghouthi.github.io/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="Aws's  Notes" href="/blog/feed.xml" />
 </head>
 
   <body>
@@ -34,11 +34,11 @@
 		
   	
 		
-		      <a href="/">Notes</a>
+		      <a href="/blog/">Notes</a>
 	    
   	
 		
-		      <a href="/css/print.css"></a>
+		      <a href="/blog/css/print.css"></a>
 	    
   	
 		
@@ -141,7 +141,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <h3 id="margin-figures">Margin Figures</h3>
 
-<p><label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/img/rhino.png" /><br />F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” <em>Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice</em> (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s <em>Visual Explanations</em>.</span>Images and graphics play an integral role in Tufte’s work. To place figures in the margin, use the custom margin figure liquid tag included in the <code class="highlighter-rouge">_plugins</code> directory like so:</p>
+<p><label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/blog/assets/img/rhino.png" /><br />F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” <em>Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice</em> (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s <em>Visual Explanations</em>.</span>Images and graphics play an integral role in Tufte’s work. To place figures in the margin, use the custom margin figure liquid tag included in the <code class="highlighter-rouge">_plugins</code> directory like so:</p>
 
 <p><code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">marginfigure</span><span class="w"> </span><span class="err">'mf-id-whatever'</span><span class="w"> </span><span class="err">'assets/img/rhino.png'</span><span class="w"> </span><span class="err">'F.J.</span><span class="w"> </span><span class="err">Cole,</span><span class="w"> </span><span class="err">“The</span><span class="w"> </span><span class="err">History</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">Albrecht</span><span class="w"> </span><span class="err">Dürer’s</span><span class="w"> </span><span class="err">Rhinoceros</span><span class="w"> </span><span class="err">in</span><span class="w"> </span><span class="err">Zoological</span><span class="w"> </span><span class="err">Literature,”</span><span class="w"> </span><span class="err">*Science,</span><span class="w"> </span><span class="err">Medicine,</span><span class="w"> </span><span class="err">and</span><span class="w"> </span><span class="err">History:</span><span class="w"> </span><span class="err">Essays</span><span class="w"> </span><span class="err">on</span><span class="w"> </span><span class="err">the</span><span class="w"> </span><span class="err">Evolution</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">Scientific</span><span class="w"> </span><span class="err">Thought</span><span class="w"> </span><span class="err">and</span><span class="w"> </span><span class="err">Medical</span><span class="w"> </span><span class="err">Practice*</span><span class="w"> </span><span class="err">(London,</span><span class="w"> </span><span class="err">1953),</span><span class="w"> </span><span class="err">ed.</span><span class="w"> </span><span class="err">E.</span><span class="w"> </span><span class="err">Ashworth</span><span class="w"> </span><span class="err">Underwood,</span><span class="w"> </span><span class="err">337-356.</span><span class="w"> </span><span class="err">From</span><span class="w"> </span><span class="err">page</span><span class="w"> </span><span class="err">71</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">Edward</span><span class="w"> </span><span class="err">Tufte’s</span><span class="w"> </span><span class="err">*Visual</span><span class="w"> </span><span class="err">Explanations*.'</span><span class="w">  </span><span class="err">%</span><span class="p">}</span></code>.</p>
 
@@ -155,7 +155,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>Yields this:</p>
 
-<figure class="fullwidth"><img src="/assets/img/napoleons-march.png" /><figcaption>Napoleon's March (Edward Tufte’s English translation)</figcaption></figure>
+<figure class="fullwidth"><img src="/blog/assets/img/napoleons-march.png" /><figcaption>Napoleon's March (Edward Tufte’s English translation)</figcaption></figure>
 
 <h3 id="main-column-figures">Main Column Figures</h3>
 
@@ -165,7 +165,7 @@ Any of these values can be changed in the</code>_sass/_settings.scss``` file bef
 
 <p>yields this:</p>
 
-<figure><figcaption>From Edward Tufte, *Visual Display of Quantitative Information*, page 92</figcaption><img src="/assets/img/exports-imports.png" /></figure>
+<figure><figcaption>From Edward Tufte, *Visual Display of Quantitative Information*, page 92</figcaption><img src="/blog/assets/img/exports-imports.png" /></figure>
 
 <h2 id="sidenotes-and-margin-notes">Sidenotes and Margin notes</h2>
 
