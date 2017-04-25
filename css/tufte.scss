@@ -287,7 +287,7 @@ div.table-wrapper { overflow-x: auto; } //changed all overflow values to 'auto' 
 
 .marginnote code, .sidenote code { font-size: 1rem; } //more .code class removal
 
-pre, pre code, p pre code { width: 90%;
+pre, pre code, p pre code { width: 55%;
            padding-left: 0%;
            overflow-x: auto; }
 
@@ -317,7 +317,7 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
                                                                    vertical-align: baseline;
                                                                    position: relative; }
                             label { cursor: pointer; }
-                            pre, pre code, p code, p pre code { width: 100%;
+                            pre, pre code, p code, p pre code { width: 65%;
                                        padding: 0; }
                             .table-caption { display: block;
                                              float: right;

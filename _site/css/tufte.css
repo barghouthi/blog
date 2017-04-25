@@ -472,7 +472,7 @@ div.table-wrapper {
   font-size: 1rem; }
 
 pre, pre code, p pre code {
-  width: 90%;
+  width: 55%;
   padding-left: 0%;
   overflow-x: auto; }
 
@@ -519,7 +519,7 @@ label.margin-toggle:not(.sidenote-number) {
     cursor: pointer; }
 
   pre, pre code, p code, p pre code {
-    width: 100%;
+    width: 65%;
     padding: 0; }
 
   .table-caption {
