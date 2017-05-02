@@ -38,7 +38,7 @@
   margin-bottom: 15px; }
 
 .highlight {
-  background: #f5f5f5; }
+  background: #E8E8E8; }
   .highlight .c {
     color: #998;
     font-style: italic; }
@@ -102,7 +102,7 @@
     color: #458;
     font-weight: bold; }
   .highlight .m {
-    color: #099; }
+    color: #005b5b; }
   .highlight .s {
     color: #d14; }
   .highlight .na {
@@ -133,13 +133,13 @@
   .highlight .w {
     color: #bbb; }
   .highlight .mf {
-    color: #099; }
+    color: #005b5b; }
   .highlight .mh {
-    color: #099; }
+    color: #005b5b; }
   .highlight .mi {
-    color: #099; }
+    color: #005b5b; }
   .highlight .mo {
-    color: #099; }
+    color: #005b5b; }
   .highlight .sb {
     color: #d14; }
   .highlight .sc {
@@ -294,7 +294,7 @@ pre, pre code, p code, p pre code {
   font-size: 1.2rem;
   line-height: 1.71428571;
   margin-top: 1.71428571rem;
-  background-color: #F5F5F5; }
+  background-color: #E8E8E8; }
 
 h1 code, h2 code, h3 code {
   font-size: 0.80em; }
@@ -452,7 +452,7 @@ div.table-wrapper {
     width: 90%; }
 
   pre code {
-    width: 90%; }
+    width: 55%; }
 
   ul {
     width: 85%; }
@@ -519,7 +519,7 @@ label.margin-toggle:not(.sidenote-number) {
     cursor: pointer; }
 
   pre, pre code, p code, p pre code {
-    width: 65%;
+    width: 55%;
     padding: 0; }
 
   .table-caption {

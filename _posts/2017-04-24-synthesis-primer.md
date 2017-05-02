@@ -6,17 +6,18 @@ layout: post
 My colleague Somesh Jha recently asked me to give a lecture on *program synthesis* to his class.
 As I prepared my notes, I realized that a single lecture is long enough to formally define the problem and code up some cool examples
 that demonstrate the process.
-This post contains the notes and code I used in class.
+This post contains the notes and code I used in class.{% sidenote 'code'
+'I go through two simple examples in this post; the full code is on [GitHub](https://github.com/barghouthi/704examples/tree/master/synthesis).' %}
 
 ## What is program synthesis anyways?
 
 In the fields of programming languages and verification,
 the traditional problem of program synthesis involves
 constructing a program from a high-level mathematical specification.
-For example, suppose you want to write out a program 
+For example, suppose you want to write a program
 that computes the factorial of a number {% m %} n \gt 1 {% em %}.
 You start with the mathematical definition of factorial,
-{% m %} n! {% em %}, and you gradually massage 
+{% m %} n! {% em %}, and you gradually massage
 it---rewrite it using your knowledge of the properties of
 factorial and mathematics---until you get to an executable program.
 
@@ -24,7 +25,7 @@ While lofty in its goals and rich in its tradition, this synthesis approach---ca
 Simply, mathematical specifications are hard to write,
 and turning a specification to a program is very hard to automate.
 
-## Inductive synthesis
+## Combinatorial synthesis
 
 Recently, researchers have been looking at forms
 of synthesis that are simpler to automate.
@@ -35,7 +36,7 @@ Think of this as the naive solution of a problem
 that you're sure works correctly, but that you won't put into production, perhaps because it's pretty inefficient.
 Your goal is to find a program ```p_smart```
 that is equivalent to ```p_naive```,
-but that is more efficient and hard to get right.{% sidenote 'compiler' '"But this is what an optimizing compiler does!" you protest. Yes! But here we are taking a *combinatorial* approach: a compiler applies a fixed set of tricks to find get to a program of interest; here we will manually define a space of programs, and search it exhaustively until we find the right one. Effectively, we are doing *super optimization*'%}
+but that is more efficient and hard to get right.{% sidenote 'compiler' '"But this is what an optimizing compiler does!" you protest. Yes! But here we are taking a *combinatorial* approach: a compiler applies a fixed set of tricks to get to an efficient program; here we will manually define a space of programs, and search it exhaustively until we find the right one. In some sense, we are doing *superoptimization*'%}
 
 
 For illustration, let's look at an extremely simple example.
@@ -65,7 +66,8 @@ the hole with ```1```.
 
 So how do we automatically find the value of ```??```
 that makes ```p_smart``` equivalent to ```p_naive```.
-Easy! There are {% m %} 2^8 {% em %} of ```??```, so we enumerate
+Easy! There are {% m %} 2^8 {% em %} different instantiations 
+of ```??```, so we enumerate
 them until we find the right one.
 In general this incurs a combinatorial explosion.
 We cannot avoid the combinatorial problem,
@@ -78,7 +80,7 @@ We will use the variable ````h````
 to denote the hole ```??```.
 
 **Definition 1** *Find a value* for ```h```
-such that *for all values* of ```x```
+such that *for all values* of ```x```,
 ```p_naive(x) == p_smart(x)```.
 
 **Definition 2**  We can think of ```h``` as
@@ -94,25 +96,25 @@ over its input and output variables, {%m%} x {%em%} and {%m%}y{%em%}.
 The idea is that the relation is true if and only
 if ```p_naive(x) == y```.
 
-So, our goal is really to find 
+So, our goal is really to find
 *find a value* for {%m%} h {%em%}
 such that *for all values* of  {%m%} x {%em%} and {%m%}y{%em%},
-we have 
+we have
 {% m %} \varphi_n(x,y) \iff \varphi_s(x,h,y) {% em %}
 is true.
 
 **Final definition**
 Finally, we are ready to state the problem logically.
 Find a satisfying assignment of the following formula
-{%math%} 
-\forall x,y \ldotp \varphi_n(x,y) \iff \varphi_s(x,h,y) 
+{%math%}
+\forall x,y \ldotp \varphi_n(x,y) \iff \varphi_s(x,h,y)
 {%endmath%}
-Notice that the variable {%m%} h {%em%} 
+Notice that the variable {%m%} h {%em%}
 is *free*. Therefore, any satisfying assignment
 of this formula is only over {%m%} h {%em%}.
 
-At this point, we have completely 
-reduced the synthesis problem to solving a logical 
+At this point, we have completely
+reduced the synthesis problem to solving a logical
 formula. We can do this with an SMT solver like [Z3](https://github.com/Z3Prover/z3).
 
 ## A detailed example
@@ -137,6 +139,9 @@ as follows.
 First, we define all the variables
 as 8-bitvectors.
 
+*The code for this example is available
+on [GitHub](http://github.com/barghouthi/704examples/blob/master/synthesis/synth.py)*
+
 ```python
 x = BitVec('x',8)
 y = BitVec('y',8)
@@ -154,7 +159,7 @@ Finally, we are ready to invoke Z3:
 ```python
 # first, encode the universally quantified formula
 # (the == symbol is if and only if)
-encoding = form = ForAll([x,y], phi_n == phi_s)
+encoding = ForAll([x,y], phi_n == phi_s)
 # second, call Z3 and check if there is a model
 s = Solver()
 s.add(encoding)
@@ -169,17 +174,17 @@ just as expected!
 ## Test-driven synthesis
 
 The approach presented above works over two programs:
-it tries to find a program that is *equivalent* to 
+it tries to find a program that is *equivalent* to
 some reference implementation.
 Instead of writing a full-blown reference implementation,
 we will now just write some test cases,
 and find a program that passes all of them.
 You could think of this as test-driven development on steroids!
 
-Say we want to write a function that, given 
-bitvector ```x```, returns a bitvector ```y``` that is 1  in the 
+Say we want to write a function that, given
+bitvector ```x```, returns a bitvector ```y``` that is 1  in the
 position of the first 0 from the right occuring in ```x```, and 0 everywhere else.{% sidenote 'sketch_example' 'Example borrowed from Sketch project and found through Loris D’Antoni’s notes.' %}
-For example, 
+For example,
 ``` python
 # test 1
 x = 00000000
@@ -203,7 +208,7 @@ that result in our desired program.
 
 Just as before, we encode the program as a logical relation:
 {% math %}
-\varphi_s \equiv y = (\sim(x + h_1))\ \&\ (x + h_2) 
+\varphi_s \equiv y = (\sim(x + h_1))\ \&\ (x + h_2)
 {% endmath %}
 Note how we encoded the two holes as two variables.
 
@@ -225,14 +230,17 @@ Finally, we solve the following formula:
 Observe that we have an implication and not an equivalence
 between the two relations.
 Intuitively, the relation defined by the test cases
-is small and does not define the behavior other than for 
+is small and does not define the behavior other than for
 the 3 test cases we've supplied.
 So what we're looking for is a program ```p_smart```
-where all 
+where all
 test cases appear in (or are a subset of) its relation.
 
 Let's encode this in Z3.
 The process is similar to what we saw above:
+
+*The code for this example is available
+on [GitHub](http://github.com/barghouthi/704examples/blob/master/synthesis/synth_test.py)*
 
 ```python
 phi_s = y == (~(x + h1)) & (x + h2)
@@ -247,23 +255,22 @@ encoding = ForAll([x,y], Implies(phi_t, phi_s))
 Solving the formula ```encoding```,
 we get ```[h2 = 1, h1 = 0]```, which results in a correct program.
 
-Since we are dealing with test cases, 
+Since we are dealing with test cases,
 the test cases we supply may be insufficient to force the SMT
 solver to find the right program; in such case,
 you can supply more tests.
-For example, if I just give Z3 test 3, on my machine I get 
+For example, if I just give Z3 test 3, on my machine I get
 ```[h2 = 15, h1 = 14]```, which is incorrect (check it).
 
 ## Conclusion
-We looked at a combinatorial form of program synthesis, where we define the search space as a program with holes. 
+We looked at a combinatorial form of program synthesis, where we define the search space as a program with holes.
 You might wonder how to encode control-flow, and not only holes that
 are replaced with consants. A great paper to read is [Synthesis of Loop-free Programs](http://www.csl.sri.com/users/tiwari/papers/pldi2011-bitvector.pdf).
 
 The idea of searching the space of programs has recently
-been explored in a wide array of settings. It turns out 
+been explored in a wide array of settings. It turns out
 that handing the problem to the SMT solver is not always the right
 way to go; sometimes a custom enumeration algorithm outperforms
 SMT solvers. SMT solvers, however, are very good at finding
-*magic constants* which simple enumeration may never get to.
-So, in bit-twiddling problems, symbolic encodings are the way to go.
-
+*magic constants*, which simple enumeration may never get to.
+So, in bit-twiddling problems, symbolic encodings like the one shown here are the way to go.
