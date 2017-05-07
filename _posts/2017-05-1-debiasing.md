@@ -1,19 +1,18 @@
 ---
 title: "Fairification: Making Unfair Programs Fair"
-
 layout: post
 ---
 
-Over the past year or so, we have been exploring the notion of *algorithmic fairness* from a programming languages perspective.
-Today I'm going to talk about a new paper we have that is appearing at CAV 2017: *Repairing Decision-making Programs under Uncertainty*, with Samuel Drews and Loris D'Antoni.
+Over the past year, I have been exploring the notion of *algorithmic fairness* from a PL/verification perspective.
+Today I'm going to talk about a new paper we have that is appearing at CAV 2017: [*Repairing Decision-making Programs under Uncertainty*](http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf), with Samuel Drews and Loris D'Antoni.
 
 ## Algorithmic fairness
 
 With software rapidly overtaking sensitive decision-making processes, like policing and sentencing, many people have been very concerned with unfairness in automated decision-making.
 The past year or so has seen lots of attention in this space, for example:
-* ProPublica's investigation uncovered bias against African Americans in software used for risk assessment in courtrooms (including here in the state of  Wisconsin), which judges can use to inform their decisions.
-* Cathy O'Neil published *Weapons of Math Destruction*, an excellent book warning about a world run by unregulated, opaque algorithms.
-* The pre-Trump White House released a report on AI that explicitly warned about encoding discrimination in automated decision-making.
+* [ProPublica's investigation](https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing) uncovered bias against African Americans in software used for risk assessment in courtrooms (including here in the state of  Wisconsin), which judges can use to inform their decisions.
+* Cathy O'Neil published [*Weapons of Math Destruction*](https://www.amazon.com/Weapons-Math-Destruction-Increases-Inequality/dp/0553418815), an excellent book warning about a world run by unregulated, opaque algorithms.
+* The pre-Trump White House released a [report](https://obamawhitehouse.archives.gov/sites/default/files/whitehouse_files/microsites/ostp/NSTC/preparing_for_the_future_of_ai.pdf) on AI that explicitly warned about encoding discrimination in automated decision-making.
 
 And this is just part of the popular coverage of algorithmic fairness.
 In our unpopular (academic) world, the action has been primarily in the machine learning arena, where researchers have been studying ways to learn fair classifiers, for certain definitions of fairness.
@@ -44,12 +43,12 @@ call this process *fairification*.
 
 The main question that I've avoided
 so far is *how do you formalize fairness?!*
-This is a hard philosophical problem.
+This is a deep philosophical problem.
 But computer scientists love to formalize
 the unformalizable!
 Recent work in the area has proposed
 several definitions.
-Let's look at the one from Feldman et al.,
+Let's look at the one from [Feldman et al.](https://arxiv.org/pdf/1412.3756.pdf),
 which formalizes  the 80--20
 rule of thumb from the Equality of Employment
 Commission here in the US:
@@ -67,7 +66,7 @@ of the population.
 OK, great. We've fully formalized
 fairness, leaving no room for philosophy.
 
-For a very simple illustration,
+For an ultra-simple illustration,
 say the program we have is the following:
 It only takes one thing about the applicant,
 the rank of the college they attended.
@@ -97,13 +96,13 @@ urank \sim Gaussian(10 + 5*min, 10)
 With this population model,
 this program is unfair; on the above
 fairness definition, the ratio
-evaluates to 0.6.
+evaluates to ~0.6.
 How do we fix it?
 
 Our approach proceeds like this:
 First, we characterize a class
 of programs using a *sketch*
-(I talked about these in the last post).
+(I talked about sketches in the last [post]({{ site.baseurl }} {% post_url 2017-04-24-synthesis-primer%})).
 One possible sketch here is the following,
 where ```??``` are unknowns.
 
@@ -127,12 +126,13 @@ the original program.
 
 Now, we want to find a completion of this
 sketch such that
-* 1) The completion is *semantically closest* to the original program.
+* 1) The completion is *semantically close* to the original program.
 (Semantic closeness  just means that
   the two programs agree on most inputs.)
 * 2) The completion is fair according
 to the definition above.
 
+The idea is that we want to give the program a small *nudge* to make it fair.
 One possible completion is the following:
 ```python
 def hire(urank):
@@ -143,26 +143,33 @@ In a sense, we kept increasing the upper bound on the college ranking until we g
 
 Before I discuss how we actually do the *fairifcation*,
 I have to state that I do not claim this is the best *debiasing* of our program or
-that that fairness conditions we used is the most desirable in this setting.
+that that fairness conditions I used in this example is the most desirable in this setting.
 I simply intended this combination for illustration.
 
 ## Fairification with program synthesis
 
 The approach we used is a new method for
 program synthesis.
-It uses SMT solvers and fancy data structures
-to traverse the space of programs until
-it finds one that is fair.
+Most work in the program synthesis literature
+attempts to find a program that satisfies a specification.
+Here, our specification is a probabilistic one.
+Our technique uses SMT solvers, fancy data structures,
+and a sprinkle of statistical learning theory for good measure.
+It traverses the space of programs
+and finds fair programs that are close to the original unfair one.
 Our technique can take an arbitrary fairness
-definition and find a program that is fair.
+definition in a syntactic language that
+is expressions over probabilities of events, like the
+80--20 rule we saw above.
 
-For details, I invite you to read our paper.
+
+For details, I invite you to read our [paper](http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf).
 For a quick synthesis primer, I invite
-you to read an earlier post.
+you to read an earlier [post]({{ site.baseurl }} {% post_url 2017-04-24-synthesis-primer%}).
 
 ## Looking forward
 
-Most of the recent works have focused on unfairness automation of bureaucratic processes, like loans, hiring, and others.
+Most of the recent works have focused on unfairness in automation of bureaucratic processes, like loans, hiring, and others.
 But fairness and unfairness extend to any other area where we interact with software. In the near future, it appears that  we'll be interacting with robots, self-driving cars, and other autonomous agents. What does fairness mean there?
 
 I believe there's lots of interesting and important
