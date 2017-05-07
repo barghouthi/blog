@@ -3,7 +3,7 @@ title: "Fairification: Making Unfair Programs Fair"
 layout: post
 ---
 
-Over the past year, I have been exploring the notion of *algorithmic fairness* from a PL/verification perspective.
+Over the past year, we have been exploring the notion of [*algorithmic fairness* from a PL/verification perspective](http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf).
 Today I'm going to talk about a new paper we have that is appearing at CAV 2017: [*Repairing Decision-making Programs under Uncertainty*](http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf), with Samuel Drews and Loris D'Antoni.
 
 ## Algorithmic fairness
