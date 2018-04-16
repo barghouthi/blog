@@ -9,6 +9,8 @@ that demonstrate the process.
 This post contains the notes and code I used in class.
 I go through two simple examples in this post; the full code is on [GitHub](https://github.com/barghouthi/704examples/tree/master/synthesis).
 
+---
+
 ## What is program synthesis anyways?
 
 In the fields of programming languages and verification,

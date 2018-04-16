@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title></title>
- <link href="http://getpoole.com/atom.xml" rel="self"/>
- <link href="http://getpoole.com/"/>
- <updated>2018-04-16T13:59:25-05:00</updated>
- <id>http://getpoole.com</id>
+ <link href="http://localhost:4000/atom.xml" rel="self"/>
+ <link href="http://localhost:4000/"/>
+ <updated>2018-04-16T15:00:01-05:00</updated>
+ <id>http://localhost:4000</id>
  <author>
    <name>Mark Otto</name>
    <email>markdotto@gmail.com</email>
@@ -14,11 +14,13 @@
  
  <entry>
    <title>Fairification: Making Unfair Programs Fair</title>
-   <link href="http://getpoole.com/2017/05/01/debiasing/"/>
+   <link href="http://localhost:4000/2017/05/01/debiasing/"/>
    <updated>2017-05-01T00:00:00-05:00</updated>
-   <id>http://getpoole.com/2017/05/01/debiasing</id>
+   <id>http://localhost:4000/2017/05/01/debiasing</id>
    <content type="html">&lt;p&gt;Over the past year, we have been exploring the notion of &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf&quot;&gt;&lt;em&gt;algorithmic fairness&lt;/em&gt; from a PL/verification perspective&lt;/a&gt;.
 Today I’m going to talk about a new paper we have that is appearing at CAV 2017: &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/cav17.pdf&quot;&gt;&lt;em&gt;Repairing Decision-making Programs under Uncertainty&lt;/em&gt;&lt;/a&gt;, with Samuel Drews and Loris D’Antoni.&lt;/p&gt;
+
+&lt;hr /&gt;
 
 &lt;h2 id=&quot;algorithmic-fairness&quot;&gt;Algorithmic fairness&lt;/h2&gt;
 
@@ -193,14 +195,16 @@ about fairness in data analysis environments?&lt;/em&gt;&lt;/p&gt;
  
  <entry>
    <title>A Program Synthesis Primer</title>
-   <link href="http://getpoole.com/2017/04/24/synthesis-primer/"/>
+   <link href="http://localhost:4000/2017/04/24/synthesis-primer/"/>
    <updated>2017-04-24T00:00:00-05:00</updated>
-   <id>http://getpoole.com/2017/04/24/synthesis-primer</id>
+   <id>http://localhost:4000/2017/04/24/synthesis-primer</id>
    <content type="html">&lt;p&gt;My colleague Somesh Jha recently asked me to give a lecture on &lt;em&gt;program synthesis&lt;/em&gt; to his class.
 As I prepared my notes, I realized that a single lecture is long enough to formally define the problem and code up some cool examples
 that demonstrate the process.
 This post contains the notes and code I used in class.
 I go through two simple examples in this post; the full code is on &lt;a href=&quot;https://github.com/barghouthi/704examples/tree/master/synthesis&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
 
 &lt;h2 id=&quot;what-is-program-synthesis-anyways&quot;&gt;What is program synthesis anyways?&lt;/h2&gt;
 

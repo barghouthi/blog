@@ -6,6 +6,8 @@ layout: post
 Over the past year, we have been exploring the notion of [*algorithmic fairness* from a PL/verification perspective](http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf).
 Today I'm going to talk about a new paper we have that is appearing at CAV 2017: [*Repairing Decision-making Programs under Uncertainty*](http://pages.cs.wisc.edu/~aws/papers/cav17.pdf), with Samuel Drews and Loris D'Antoni.
 
+---
+
 ## Algorithmic fairness
 
 With software rapidly overtaking sensitive decision-making processes, like policing and sentencing, many people have been very concerned with unfairness in automated decision-making.
