@@ -95,7 +95,7 @@ such that *for all values* of `x`,
 an input to `p_smart`.
 So, our goal is really to
 *find a value* for `h`
-such that *for all values* of `x`
+such that *for all values* of `x`,
 `p_naive(x) == p_smart(x,h)`.
 
 **Definition 3** Now, we can view a program, say, `p_naive`,
@@ -214,24 +214,30 @@ y = 00000001
 
 Suppose you have the following hunch on how to write
 such a program efficiently:
-`c
+{% highlight python %}
 y = (~(x + ??)) & (x + ??)
-`
+{% endhighlight %}
+
 Here `~` is bitwise not and `&` is bitwise and.
 Our goal is to find solutions to the two holes
 that result in our desired program.
 
 Just as before, we encode the program as a logical relation:
+
 $$
 \varphi_s \equiv y = (\sim(x + h_1))\ \&\ (x + h_2)
 $$
+
 Note how we encoded the two holes as two variables.
 
 Similarly, we can encode the test cases as a relation:
+
 $$
 \varphi_t \equiv  t_1 \lor t_2 \lor t_3
 $$
+
 where
+
 $$
 t_1 \equiv x = 0 \land y = 1\\
 t_2 \equiv x = 3 \land y = 4\\

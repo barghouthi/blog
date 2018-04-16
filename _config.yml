@@ -4,7 +4,7 @@ permalink:           pretty
 # Setup
 title:               
 tagline:             Aws's blog
-url:                 http://getpoole.com
+url:                 http://barghouthi.github.io
 paginate:            2
 baseurl:             ""
 markdown: kramdown
@@ -28,6 +28,6 @@ github:
   repo:              https://github.com/poole/poole
 
 # Gems
-gems:
+plugins:
   - jekyll-paginate
   - jekyll-gist

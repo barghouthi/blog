@@ -4,7 +4,7 @@
  <title></title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2018-04-16T15:00:01-05:00</updated>
+ <updated>2018-04-16T15:20:32-05:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Mark Otto</name>
@@ -281,7 +281,7 @@ such that &lt;em&gt;for all values&lt;/em&gt; of &lt;code class=&quot;highlighte
 an input to &lt;code class=&quot;highlighter-rouge&quot;&gt;p_smart&lt;/code&gt;.
 So, our goal is really to
 &lt;em&gt;find a value&lt;/em&gt; for &lt;code class=&quot;highlighter-rouge&quot;&gt;h&lt;/code&gt;
-such that &lt;em&gt;for all values&lt;/em&gt; of &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;
+such that &lt;em&gt;for all values&lt;/em&gt; of &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;,
 &lt;code class=&quot;highlighter-rouge&quot;&gt;p_naive(x) == p_smart(x,h)&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Definition 3&lt;/strong&gt; Now, we can view a program, say, &lt;code class=&quot;highlighter-rouge&quot;&gt;p_naive&lt;/code&gt;,
@@ -382,25 +382,30 @@ position of the first 0 from the right occuring in &lt;code class=&quot;highligh
 &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mo&quot;&gt;00000001&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Suppose you have the following hunch on how to write
-such a program efficiently:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;c
-y = (~(x + ??)) &amp;amp; (x + ??)
-&lt;/code&gt;
-Here &lt;code class=&quot;highlighter-rouge&quot;&gt;~&lt;/code&gt; is bitwise not and &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt; is bitwise and.
+such a program efficiently:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;??&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;??&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Here &lt;code class=&quot;highlighter-rouge&quot;&gt;~&lt;/code&gt; is bitwise not and &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt; is bitwise and.
 Our goal is to find solutions to the two holes
 that result in our desired program.&lt;/p&gt;
 
-&lt;p&gt;Just as before, we encode the program as a logical relation:
-&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
-\varphi_s \equiv y = (\sim(x + h_1))\ \&amp;\ (x + h_2) %]]&gt;&lt;/script&gt;
-Note how we encoded the two holes as two variables.&lt;/p&gt;
+&lt;p&gt;Just as before, we encode the program as a logical relation:&lt;/p&gt;
 
-&lt;p&gt;Similarly, we can encode the test cases as a relation:
-&lt;script type=&quot;math/tex&quot;&gt;\varphi_t \equiv  t_1 \lor t_2 \lor t_3&lt;/script&gt;
-where
-&lt;script type=&quot;math/tex&quot;&gt;t_1 \equiv x = 0 \land y = 1\\
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\varphi_s \equiv y = (\sim(x + h_1))\ \&amp;\ (x + h_2) %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Note how we encoded the two holes as two variables.&lt;/p&gt;
+
+&lt;p&gt;Similarly, we can encode the test cases as a relation:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\varphi_t \equiv  t_1 \lor t_2 \lor t_3&lt;/script&gt;
+
+&lt;p&gt;where&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;t_1 \equiv x = 0 \land y = 1\\
 t_2 \equiv x = 3 \land y = 4\\
-t_3 \equiv x = 2 \land y = 1&lt;/script&gt;&lt;/p&gt;
+t_3 \equiv x = 2 \land y = 1&lt;/script&gt;
 
 &lt;p&gt;Finally, we solve the following formula:
 &lt;script type=&quot;math/tex&quot;&gt;\forall x, y \ldotp \varphi_t \Rightarrow \varphi_s&lt;/script&gt;
