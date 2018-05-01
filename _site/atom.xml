@@ -4,7 +4,7 @@
  <title></title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2018-04-30T21:56:22-05:00</updated>
+ <updated>2018-05-01T10:47:15-05:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Mark Otto</name>
@@ -14,53 +14,80 @@
  
  <entry>
    <title>Differentiable Programming: A Semantics Perspective</title>
-   <link href="http://localhost:4000/2018/04/30/differentiable-programming/"/>
-   <updated>2018-04-30T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2018/04/30/differentiable-programming</id>
+   <link href="http://localhost:4000/2018/05/01/differentiable-programming/"/>
+   <updated>2018-05-01T00:00:00-05:00</updated>
+   <id>http://localhost:4000/2018/05/01/differentiable-programming</id>
    <content type="html">&lt;p&gt;So deep learning has taken the world by storm.
 Frameworks for training deep neural networks, like &lt;a href=&quot;https://www.tensorflow.org/&quot;&gt;TensorFlow&lt;/a&gt;, allow you to construct so-called &lt;em&gt;differentiable programs&lt;/em&gt;.
-The idea is that one can compute the derivative of some program, and then use that to optimize its parameters.
-This post is written to indroduce researchers in the verification and programming languages community to automatic differentation of programs.
-The assumption is that—extrapolating from myself here—you got into this feild for the love of logic and discrete math (and an unhealthy aversion to continuous mathematics).&lt;/p&gt;
+The idea is that one can compute the derivative of some program (usually some neural net), and then use that to optimize its parameters.&lt;/p&gt;
+
+&lt;p&gt;I wrote this post to introduce researchers in the verification and programming languages community to automatic differentiation of programs.
+The assumption is that—extrapolating from myself here—you got into this field for the love of logic and discrete math (and an unhealthy aversion to continuous mathematics).&lt;/p&gt;
 
 &lt;hr /&gt;
 
 &lt;h2 id=&quot;programming-language&quot;&gt;Programming language&lt;/h2&gt;
 &lt;p&gt;Let’s consider a very simple programming language where there are no loops or conditions, just a sequence of assignment statements the form:&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_1 \gets c \times v_2&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_1 \gets c&lt;/script&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_1 \gets v_1 + v_2&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_1 \gets v_2 \times v_3&lt;/script&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_1 \gets sin(v_2)&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_1 \gets v_2 + v_3&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_1 \gets cos(v_2)&lt;/script&gt;
 
 &lt;p&gt;Here, $c$ is a real-valued constant and $v_i$ are real-valued program variables.
 Any program $P$ in this language is assumed to have a single special input variable $x$ and an output variable $y$.&lt;/p&gt;
 
-&lt;p&gt;$P$ is also assumed to be in &lt;em&gt;static single assignment&lt;/em&gt; (SSA) form—in other words, each variable gets assigned to once.
+&lt;p&gt;$P$ is also assumed to be in &lt;em&gt;static single assignment&lt;/em&gt; (SSA) form—i.e., each variable gets assigned to at most once.
 This is equivalent to &lt;em&gt;continuation-passing style&lt;/em&gt; (CPS). If you’ve used TensorFlow, the &lt;em&gt;computation graph&lt;/em&gt; that you construct there is effectively a program in SSA, where each graph node represents one variable’s assignment.&lt;/p&gt;
 
-&lt;h2 id=&quot;langauge-semantics&quot;&gt;Langauge semantics&lt;/h2&gt;
+&lt;h2 id=&quot;example-program&quot;&gt;Example program&lt;/h2&gt;
+&lt;p&gt;Note that programs in our language are functions in $\mathbb{R} \to \mathbb{R}$.
+Consider the function $f(x) = x^2 + cos(x^2)$.
+We can write this in our language as the program $P$ below:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+v_1 &amp;\gets x \times x\\
+v_2 &amp;\gets cos(v_1)\\
+y &amp;\gets v_1 + v_2
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;If you plot this function, you get the following spooky graph:
+&lt;img src=&quot;http://localhost:4000/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you remember your calculus, the partial derivative of a function $\frac{\partial f}{\partial x}$ is essentially the rate of change of the output $y$ as $x$ changes.
+For our function $f$,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial f}{\partial x}(x) = 2x + sin(x)&lt;/script&gt;
+
+&lt;p&gt;Notice that  $\frac{\partial f}{\partial x}(0) = 0$,
+since  $x = 0$ is a &lt;em&gt;stationary point&lt;/em&gt;, so the rate of change at that point is 0.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Technically, we’re computing total derivatives in the post, since we only have one input variable $x$, which I enforce for simplicity. The general methodology I lay out here easily extends to functions with multiple input arguments.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;language-semantics&quot;&gt;Language semantics&lt;/h2&gt;
 &lt;p&gt;The semantics of our little language is standard.
 A state $s$ of a program $P$ is a map from variables
-to values.
+to real numbers.
 The function $\textit{post}$ below takes a program and a state $s$ and returns the state resulting from executing $P$:&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;$\textit{post}(P_1;P_2, s) \triangleq \textit{post}(P_2,\textit{post}(P_1,s))$&lt;/li&gt;
-  &lt;li&gt;$\textit{post}(v_1 \gets c \times v_2, s) \triangleq s[v \mapsto c \times s(v_2)]$&lt;/li&gt;
-  &lt;li&gt;$\textit{post}(v_1 \gets v_2 + v_3, s) \triangleq s[v \mapsto s(v_1) + s(v_2)]$&lt;/li&gt;
-  &lt;li&gt;$\textit{post}(v_1 \gets sin(v_2), s) \triangleq s[v \mapsto sin(s(v_2))]$&lt;/li&gt;
+  &lt;li&gt;$\textit{post}(v_1 \gets c, s) \triangleq s[v_1 \mapsto c]$&lt;/li&gt;
+  &lt;li&gt;$\textit{post}(v_1 \gets v_2 \times v_3, s) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)]$&lt;/li&gt;
+  &lt;li&gt;$\textit{post}(v_1 \gets v_2 + v_3, s) \triangleq s[v_1 \mapsto s(v_2) + s(v_3)]$&lt;/li&gt;
+  &lt;li&gt;$\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v_1 \mapsto cos(s(v_2))]$&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;Above, $P_1;P_2$ denotes sequential composition.
-The notation $s[v \mapsto c]$ denotes state $s$ but with $v$ mapping to the value $c$.&lt;/p&gt;
+$s(v)$ denotes the value of $v$ in state $s$, and $s[v \mapsto c]$ denotes state $s$ but with $v$ mapping to the value $c$.&lt;/p&gt;
 
 &lt;h2 id=&quot;forward-differentiation&quot;&gt;Forward differentiation&lt;/h2&gt;
 
-&lt;p&gt;Note that programs in our language are functions in $\mathbb{R} \to \mathbb{R}$.
-We will now extend the semantics such that evaluating $P$ on input $x$ not only returns $P(x)$, but also $\frac{\partial P}{\partial x}(x)$, the partial derivative of $P$ w.r.t. the input variable $x$.
-If you remember your calculus, the partial derivative is essentially the rate of change of the output $y$ as $x$ changes.&lt;/p&gt;
+&lt;p&gt;We will now extend the semantics such that evaluating $P$ on input $x$ not only returns $P(x)$, but also $\frac{\partial P}{\partial x}(x)$, the partial derivative of $P$ w.r.t. the input variable $x$.&lt;/p&gt;
 
 &lt;p&gt;Below, we define the new semantics with a function $\partial\textit{post}$, where we keep track of two copies of the program variables, the variables $v_i$ and a new copy $\dot v_i$, which denotes the rate of change of $v_i$ w.r.t. the input $x$, i.e.,&lt;/p&gt;
 
@@ -68,13 +95,16 @@ If you remember your calculus, the partial derivative is essentially the rate of
 
 &lt;p&gt;Finally, when the program terminates with the new semantics, we can recover the variable $\dot y$, which will hold the value $\frac{\partial P}{\partial x}(x)$.&lt;/p&gt;
 
+&lt;p&gt;&lt;em&gt;Note that, by definition, $\dot x = 1$.&lt;/em&gt;&lt;/p&gt;
+
 &lt;p&gt;&lt;strong&gt;Sequential composition&lt;/strong&gt; For sequential composition, $P_1;P_2$, $\partial\textit{post}$ behaves just like $\textit{post}$.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Multiplication&lt;/strong&gt; For multiplication by a constant,&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Constant assignment&lt;/strong&gt; For the constant assignment $v_1 \gets c$,
+we have&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets c \times v_2) \triangleq s[v \mapsto c \times s(v_2)][\dot v \mapsto c \times \dot v_2]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets c) \triangleq s[v_1 \mapsto c][ \dot v_1 \mapsto 0]&lt;/script&gt;
 
-&lt;p&gt;In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of $v_2$ scaled by $c$.&lt;/p&gt;
+&lt;p&gt;In other words, the rate of change of $v_1$ is zero, since it’s not dependent on $x$ in any way.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Addition&lt;/strong&gt; For addition, we have&lt;/p&gt;
 
@@ -82,16 +112,43 @@ If you remember your calculus, the partial derivative is essentially the rate of
 
 &lt;p&gt;That is, the rate of change $v_1$ is the sum of the rates of change of $v_2$ and $v_3$.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Trignometric functions&lt;/strong&gt; For sine, we have&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Multiplication&lt;/strong&gt; For multiplication by a constant,&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets sin(v_2)) \triangleq s[v \mapsto sin(s(v_2))] [\dot v \mapsto \dot v_2 \times cos(s(v_2))]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets v_2 \times v_3) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)][\dot v_1 \mapsto \dot v_2 \times v_3 + v_2 \times \dot v_3]&lt;/script&gt;
+
+&lt;p&gt;In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of $v_2$, scaled by $v_1$, plus the rate of change of $v_3$, scaled by $v_2$.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Trignometric functions&lt;/strong&gt; For cosine, we have&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets cos(v_2)) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times sin(s(v_2))]&lt;/script&gt;
 
 &lt;p&gt;This follows from the &lt;em&gt;chain rule&lt;/em&gt;, which says that the rate of change of $f(u)$ is the rate of change of $f$ scaled by the rate of change of its argument $u$.
-You might remember that derivative of $sin(x)$ is $cos(x)$, so, following the chain rule, we simply scale $cos(v_2)$ by $\dot v_2$.&lt;/p&gt;
+You might remember that derivative of $cos(x)$ is $sin(x)$, so, following the chain rule, we simply scale $cos(v_2)$ by $\dot v_2$.&lt;/p&gt;
+
+&lt;h2 id=&quot;example-continued&quot;&gt;Example continued&lt;/h2&gt;
+
+&lt;p&gt;Continuing our above example with the program $P$ encoding the function $f(x) = x^2 + cos(x^2)$,
+we can now execute $P$ using our new semantics.
+Say, we begin executing $P$ from the state where $x = 0$.
+At the end of the execution, we will get a state
+where $y = 1$, and $\dot y = 0$.&lt;/p&gt;
+
+&lt;p&gt;Let’s step through the program, one instruction at a time, maintaining both copies of the variables at every point along the way.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+[x = 0, \dot x = 1, \ldots]\\
+v_1 &amp;\gets x \times x\\
+[v_1 = 0, \dot v_1 = 0, \ldots]\\
+v_2 &amp;\gets cos(v_1)\\
+[v_2 = 1, \dot v_2 = 0, \ldots]\\
+y &amp;\gets v_1 + v_2\\
+[y = 1, \dot y = 0, \ldots]\\
+\end{align*} %]]&gt;&lt;/script&gt;
 
 &lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
 
-&lt;p&gt;I covered the simpler case of forward differentiation, which proceeds by executing the program in a forward manner. For functions with more than one input, it is more efficient to perform backward differentiation, which the popular &lt;em&gt;backpropagation&lt;/em&gt; algorithm implements. Adapting the above semantics to backpropagation is not hard, it’s just messier, as we have to execute the program forward and then backward. Therefore, I decided to illustrate the forward mode only. For more information, I encourage you to read the excellent survey by &lt;a href=&quot;https://arxiv.org/abs/1502.05767&quot;&gt;Baydin et al.&lt;/a&gt;, which heavily influenced my presentation.&lt;/p&gt;
+&lt;p&gt;I covered the simpler case of forward differentiation, which proceeds by executing the program in a forward manner. For functions with more than one input, it is more efficient to perform backward differentiation, which the popular &lt;em&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Backpropagation&quot;&gt;backpropagation&lt;/a&gt;&lt;/em&gt; algorithm is an instance of. Adapting the above semantics to backpropagation is not hard, it’s just messier, as we have to execute the program forward and then backward. Therefore, I decided to illustrate the forward mode only. For more information, I encourage you to read the excellent survey by &lt;a href=&quot;https://arxiv.org/abs/1502.05767&quot;&gt;Baydin et al.&lt;/a&gt;, which heavily influenced my presentation.&lt;/p&gt;
 </content>
  </entry>
  
