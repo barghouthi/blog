@@ -18,14 +18,10 @@ sass:
 
 # About/contact
 author:
-  name:              Mark Otto
-  url:               https://twitter.com/mdo
-  email:             markdotto@gmail.com
+  name:              Aws Albarghouthi
+  url:               https://twitter.com/awsTO
+  email:             albargah@gmail.com
 
-# Custom vars
-version:             2.0.0
-github:
-  repo:              https://github.com/poole/poole
 
 # Gems
 plugins:

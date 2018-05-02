@@ -2,21 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title></title>
- <link href="http://localhost:4000/atom.xml" rel="self"/>
- <link href="http://localhost:4000/"/>
- <updated>2018-05-01T10:47:15-05:00</updated>
- <id>http://localhost:4000</id>
+ <link href="http://barghouthi.github.io/atom.xml" rel="self"/>
+ <link href="http://barghouthi.github.io/"/>
+ <updated>2018-05-02T11:10:24-05:00</updated>
+ <id>http://barghouthi.github.io</id>
  <author>
-   <name>Mark Otto</name>
-   <email>markdotto@gmail.com</email>
+   <name>Aws Albarghouthi</name>
+   <email>albargah@gmail.com</email>
  </author>
 
  
  <entry>
    <title>Differentiable Programming: A Semantics Perspective</title>
-   <link href="http://localhost:4000/2018/05/01/differentiable-programming/"/>
+   <link href="http://barghouthi.github.io/2018/05/01/differentiable-programming/"/>
    <updated>2018-05-01T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2018/05/01/differentiable-programming</id>
+   <id>http://barghouthi.github.io/2018/05/01/differentiable-programming</id>
    <content type="html">&lt;p&gt;So deep learning has taken the world by storm.
 Frameworks for training deep neural networks, like &lt;a href=&quot;https://www.tensorflow.org/&quot;&gt;TensorFlow&lt;/a&gt;, allow you to construct so-called &lt;em&gt;differentiable programs&lt;/em&gt;.
 The idea is that one can compute the derivative of some program (usually some neural net), and then use that to optimize its parameters.&lt;/p&gt;
@@ -27,7 +27,7 @@ The assumption is that—extrapolating from myself here—you got into this fiel
 &lt;hr /&gt;
 
 &lt;h2 id=&quot;programming-language&quot;&gt;Programming language&lt;/h2&gt;
-&lt;p&gt;Let’s consider a very simple programming language where there are no loops or conditions, just a sequence of assignment statements the form:&lt;/p&gt;
+&lt;p&gt;Let’s consider a very simple programming language where there are no loops or conditions, just a sequence of assignment statements of the form:&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;v_1 \gets c&lt;/script&gt;
 
@@ -56,7 +56,7 @@ y &amp;\gets v_1 + v_2
 \end{align*} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;If you plot this function, you get the following spooky graph:
-&lt;img src=&quot;http://localhost:4000/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://barghouthi.github.io/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you remember your calculus, the partial derivative of a function $\frac{\partial f}{\partial x}$ is essentially the rate of change of the output $y$ as $x$ changes.
 For our function $f$,&lt;/p&gt;
@@ -66,7 +66,7 @@ For our function $f$,&lt;/p&gt;
 &lt;p&gt;Notice that  $\frac{\partial f}{\partial x}(0) = 0$,
 since  $x = 0$ is a &lt;em&gt;stationary point&lt;/em&gt;, so the rate of change at that point is 0.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Technically, we’re computing total derivatives in the post, since we only have one input variable $x$, which I enforce for simplicity. The general methodology I lay out here easily extends to functions with multiple input arguments.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Technically, we’re computing total derivatives in this post, since we only have one input variable $x$, which I enforce for simplicity. The general methodology I lay out here easily extends to functions with multiple input arguments.&lt;/em&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;language-semantics&quot;&gt;Language semantics&lt;/h2&gt;
 &lt;p&gt;The semantics of our little language is standard.
@@ -82,7 +82,7 @@ The function $\textit{post}$ below takes a program and a state $s$ and returns t
   &lt;li&gt;$\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v_1 \mapsto cos(s(v_2))]$&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;Above, $P_1;P_2$ denotes sequential composition.
+&lt;p&gt;Above, $P_1;P_2$ denotes sequential composition,
 $s(v)$ denotes the value of $v$ in state $s$, and $s[v \mapsto c]$ denotes state $s$ but with $v$ mapping to the value $c$.&lt;/p&gt;
 
 &lt;h2 id=&quot;forward-differentiation&quot;&gt;Forward differentiation&lt;/h2&gt;
@@ -102,25 +102,25 @@ $s(v)$ denotes the value of $v$ in state $s$, and $s[v \mapsto c]$ denotes state
 &lt;p&gt;&lt;strong&gt;Constant assignment&lt;/strong&gt; For the constant assignment $v_1 \gets c$,
 we have&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets c) \triangleq s[v_1 \mapsto c][ \dot v_1 \mapsto 0]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets c, s) \triangleq s[v_1 \mapsto c][ \dot v_1 \mapsto 0]&lt;/script&gt;
 
 &lt;p&gt;In other words, the rate of change of $v_1$ is zero, since it’s not dependent on $x$ in any way.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Addition&lt;/strong&gt; For addition, we have&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets v_2 + v_3) \triangleq s[v \mapsto s(v_1) + s(v_2)][ \dot v \mapsto s(\dot v_1) + s(\dot v_2)]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets v_2 + v_3, s) \triangleq s[v \mapsto s(v_1) + s(v_2)][ \dot v \mapsto s(\dot v_1) + s(\dot v_2)]&lt;/script&gt;
 
-&lt;p&gt;That is, the rate of change $v_1$ is the sum of the rates of change of $v_2$ and $v_3$.&lt;/p&gt;
+&lt;p&gt;That is, the rate of change of $v_1$ is the sum of the rates of change of $v_2$ and $v_3$.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Multiplication&lt;/strong&gt; For multiplication by a constant,&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Multiplication&lt;/strong&gt; For multiplication,&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets v_2 \times v_3) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)][\dot v_1 \mapsto \dot v_2 \times v_3 + v_2 \times \dot v_3]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets v_2 \times v_3, s) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)][\dot v_1 \mapsto \dot v_2 \times v_3 + v_2 \times \dot v_3]&lt;/script&gt;
 
 &lt;p&gt;In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of $v_2$, scaled by $v_1$, plus the rate of change of $v_3$, scaled by $v_2$.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Trignometric functions&lt;/strong&gt; For cosine, we have&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets cos(v_2)) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times sin(s(v_2))]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times sin(s(v_2))]&lt;/script&gt;
 
 &lt;p&gt;This follows from the &lt;em&gt;chain rule&lt;/em&gt;, which says that the rate of change of $f(u)$ is the rate of change of $f$ scaled by the rate of change of its argument $u$.
 You might remember that derivative of $cos(x)$ is $sin(x)$, so, following the chain rule, we simply scale $cos(v_2)$ by $\dot v_2$.&lt;/p&gt;
@@ -133,7 +133,7 @@ Say, we begin executing $P$ from the state where $x = 0$.
 At the end of the execution, we will get a state
 where $y = 1$, and $\dot y = 0$.&lt;/p&gt;
 
-&lt;p&gt;Let’s step through the program, one instruction at a time, maintaining both copies of the variables at every point along the way.&lt;/p&gt;
+&lt;p&gt;Let’s step through the program one instruction at a time, maintaining both copies of the variables at every point along the way.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align*}
@@ -154,9 +154,9 @@ y &amp;\gets v_1 + v_2\\
  
  <entry>
    <title>Fairification: Making Unfair Programs Fair</title>
-   <link href="http://localhost:4000/2017/05/01/debiasing/"/>
+   <link href="http://barghouthi.github.io/2017/05/01/debiasing/"/>
    <updated>2017-05-01T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2017/05/01/debiasing</id>
+   <id>http://barghouthi.github.io/2017/05/01/debiasing</id>
    <content type="html">&lt;p&gt;Over the past year, we have been exploring the notion of &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf&quot;&gt;&lt;em&gt;algorithmic fairness&lt;/em&gt; from a PL/verification perspective&lt;/a&gt;.
 Today I’m going to talk about a new paper we have that is appearing at CAV 2017: &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/cav17.pdf&quot;&gt;&lt;em&gt;Repairing Decision-making Programs under Uncertainty&lt;/em&gt;&lt;/a&gt;, with Samuel Drews and Loris D’Antoni.&lt;/p&gt;
 
@@ -335,9 +335,9 @@ about fairness in data analysis environments?&lt;/em&gt;&lt;/p&gt;
  
  <entry>
    <title>A Program Synthesis Primer</title>
-   <link href="http://localhost:4000/2017/04/24/synthesis-primer/"/>
+   <link href="http://barghouthi.github.io/2017/04/24/synthesis-primer/"/>
    <updated>2017-04-24T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2017/04/24/synthesis-primer</id>
+   <id>http://barghouthi.github.io/2017/04/24/synthesis-primer</id>
    <content type="html">&lt;p&gt;My colleague Somesh Jha recently asked me to give a lecture on &lt;em&gt;program synthesis&lt;/em&gt; to his class.
 As I prepared my notes, I realized that a single lecture is long enough to formally define the problem and code up some cool examples
 that demonstrate the process.

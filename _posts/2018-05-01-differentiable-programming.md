@@ -14,7 +14,7 @@ The assumption is that---extrapolating from myself here---you got into this fiel
 ---
 
 ## Programming language
-Let's consider a very simple programming language where there are no loops or conditions, just a sequence of assignment statements the form:
+Let's consider a very simple programming language where there are no loops or conditions, just a sequence of assignment statements of the form:
 
 $$v_1 \gets c$$
 
@@ -44,7 +44,7 @@ y &\gets v_1 + v_2
 $$
 
 If you plot this function, you get the following spooky graph:
-![Graph of running example]({{ "/assets/graph.png" | absolute_url }})
+![Graph of running example]({{site.url}}/assets/graph.png)
 
 If you remember your calculus, the partial derivative of a function $\frac{\partial f}{\partial x}$ is essentially the rate of change of the output $y$ as $x$ changes.
 For our function $f$,
@@ -54,7 +54,7 @@ $$\frac{\partial f}{\partial x}(x) = 2x + sin(x)$$
 Notice that  $\frac{\partial f}{\partial x}(0) = 0$,
 since  $x = 0$ is a *stationary point*, so the rate of change at that point is 0.
 
-*Technically, we're computing total derivatives in the post, since we only have one input variable $x$, which I enforce for simplicity. The general methodology I lay out here easily extends to functions with multiple input arguments.*
+*Technically, we're computing total derivatives in this post, since we only have one input variable $x$, which I enforce for simplicity. The general methodology I lay out here easily extends to functions with multiple input arguments.*
 
 ## Language semantics
 The semantics of our little language is standard.
@@ -68,7 +68,7 @@ The function $\textit{post}$ below takes a program and a state $s$ and returns t
 3. $\textit{post}(v_1 \gets v_2 + v_3, s) \triangleq s[v_1 \mapsto s(v_2) + s(v_3)]$
 4. $\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v_1 \mapsto cos(s(v_2))]$
 
-Above, $P_1;P_2$ denotes sequential composition.
+Above, $P_1;P_2$ denotes sequential composition,
 $s(v)$ denotes the value of $v$ in state $s$, and $s[v \mapsto c]$ denotes state $s$ but with $v$ mapping to the value $c$.
 
 
@@ -94,19 +94,19 @@ Finally, when the program terminates with the new semantics, we can recover the 
 **Constant assignment** For the constant assignment $v_1 \gets c$,
 we have
 
-$$\partial\textit{post}(v_1 \gets c) \triangleq s[v_1 \mapsto c][ \dot v_1 \mapsto 0]$$
+$$\partial\textit{post}(v_1 \gets c, s) \triangleq s[v_1 \mapsto c][ \dot v_1 \mapsto 0]$$
 
 In other words, the rate of change of $v_1$ is zero, since it's not dependent on $x$ in any way.
 
 **Addition** For addition, we have
 
-$$\partial\textit{post}(v_1 \gets v_2 + v_3) \triangleq s[v \mapsto s(v_1) + s(v_2)][ \dot v \mapsto s(\dot v_1) + s(\dot v_2)]$$
+$$\partial\textit{post}(v_1 \gets v_2 + v_3, s) \triangleq s[v \mapsto s(v_1) + s(v_2)][ \dot v \mapsto s(\dot v_1) + s(\dot v_2)]$$
 
-That is, the rate of change $v_1$ is the sum of the rates of change of $v_2$ and $v_3$.
+That is, the rate of change of $v_1$ is the sum of the rates of change of $v_2$ and $v_3$.
 
-**Multiplication** For multiplication by a constant,
+**Multiplication** For multiplication,
 
-$$\partial\textit{post}(v_1 \gets v_2 \times v_3) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)][\dot v_1 \mapsto \dot v_2 \times v_3 + v_2 \times \dot v_3]$$
+$$\partial\textit{post}(v_1 \gets v_2 \times v_3, s) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)][\dot v_1 \mapsto \dot v_2 \times v_3 + v_2 \times \dot v_3]$$
 
 In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of $v_2$, scaled by $v_1$, plus the rate of change of $v_3$, scaled by $v_2$.
 
@@ -114,7 +114,7 @@ In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of 
 
 **Trignometric functions** For cosine, we have
 
-$$\partial\textit{post}(v_1 \gets cos(v_2)) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times sin(s(v_2))]$$
+$$\partial\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times sin(s(v_2))]$$
 
 This follows from the *chain rule*, which says that the rate of change of $f(u)$ is the rate of change of $f$ scaled by the rate of change of its argument $u$.
 You might remember that derivative of $cos(x)$ is $sin(x)$, so, following the chain rule, we simply scale $cos(v_2)$ by $\dot v_2$.
@@ -127,7 +127,7 @@ Say, we begin executing $P$ from the state where $x = 0$.
 At the end of the execution, we will get a state
 where $y = 1$, and $\dot y = 0$.
 
-Let's step through the program, one instruction at a time, maintaining both copies of the variables at every point along the way.
+Let's step through the program one instruction at a time, maintaining both copies of the variables at every point along the way.
 
 $$
 \begin{align*}
