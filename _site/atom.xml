@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title></title>
- <link href="http://barghouthi.github.io/atom.xml" rel="self"/>
- <link href="http://barghouthi.github.io/"/>
- <updated>2018-05-02T11:10:24-05:00</updated>
- <id>http://barghouthi.github.io</id>
+ <link href="http://localhost:4000/atom.xml" rel="self"/>
+ <link href="http://localhost:4000/"/>
+ <updated>2018-05-03T08:24:48-05:00</updated>
+ <id>http://localhost:4000</id>
  <author>
    <name>Aws Albarghouthi</name>
    <email>albargah@gmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Differentiable Programming: A Semantics Perspective</title>
-   <link href="http://barghouthi.github.io/2018/05/01/differentiable-programming/"/>
+   <link href="http://localhost:4000/2018/05/01/differentiable-programming/"/>
    <updated>2018-05-01T00:00:00-05:00</updated>
-   <id>http://barghouthi.github.io/2018/05/01/differentiable-programming</id>
+   <id>http://localhost:4000/2018/05/01/differentiable-programming</id>
    <content type="html">&lt;p&gt;So deep learning has taken the world by storm.
 Frameworks for training deep neural networks, like &lt;a href=&quot;https://www.tensorflow.org/&quot;&gt;TensorFlow&lt;/a&gt;, allow you to construct so-called &lt;em&gt;differentiable programs&lt;/em&gt;.
 The idea is that one can compute the derivative of some program (usually some neural net), and then use that to optimize its parameters.&lt;/p&gt;
@@ -56,12 +56,12 @@ y &amp;\gets v_1 + v_2
 \end{align*} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;If you plot this function, you get the following spooky graph:
-&lt;img src=&quot;http://barghouthi.github.io/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://localhost:4000/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you remember your calculus, the partial derivative of a function $\frac{\partial f}{\partial x}$ is essentially the rate of change of the output $y$ as $x$ changes.
 For our function $f$,&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial f}{\partial x}(x) = 2x + sin(x)&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial f}{\partial x}(x) = 2x - 2x \times sin(x)&lt;/script&gt;
 
 &lt;p&gt;Notice that  $\frac{\partial f}{\partial x}(0) = 0$,
 since  $x = 0$ is a &lt;em&gt;stationary point&lt;/em&gt;, so the rate of change at that point is 0.&lt;/p&gt;
@@ -116,14 +116,14 @@ we have&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets v_2 \times v_3, s) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)][\dot v_1 \mapsto \dot v_2 \times v_3 + v_2 \times \dot v_3]&lt;/script&gt;
 
-&lt;p&gt;In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of $v_2$, scaled by $v_1$, plus the rate of change of $v_3$, scaled by $v_2$.&lt;/p&gt;
+&lt;p&gt;In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of $v_2$, scaled by $v_3$, plus the rate of change of $v_3$, scaled by $v_2$.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Trignometric functions&lt;/strong&gt; For cosine, we have&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Trigonometric functions&lt;/strong&gt; For cosine, we have&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times sin(s(v_2))]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\partial\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times - sin(s(v_2))]&lt;/script&gt;
 
 &lt;p&gt;This follows from the &lt;em&gt;chain rule&lt;/em&gt;, which says that the rate of change of $f(u)$ is the rate of change of $f$ scaled by the rate of change of its argument $u$.
-You might remember that derivative of $cos(x)$ is $sin(x)$, so, following the chain rule, we simply scale $cos(v_2)$ by $\dot v_2$.&lt;/p&gt;
+You might remember that the derivative of $cos(x)$ is $-sin(x)$, so, following the chain rule, we simply scale $-sin(v_2)$ by $\dot v_2$.&lt;/p&gt;
 
 &lt;h2 id=&quot;example-continued&quot;&gt;Example continued&lt;/h2&gt;
 
@@ -149,14 +149,16 @@ y &amp;\gets v_1 + v_2\\
 &lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
 
 &lt;p&gt;I covered the simpler case of forward differentiation, which proceeds by executing the program in a forward manner. For functions with more than one input, it is more efficient to perform backward differentiation, which the popular &lt;em&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Backpropagation&quot;&gt;backpropagation&lt;/a&gt;&lt;/em&gt; algorithm is an instance of. Adapting the above semantics to backpropagation is not hard, it’s just messier, as we have to execute the program forward and then backward. Therefore, I decided to illustrate the forward mode only. For more information, I encourage you to read the excellent survey by &lt;a href=&quot;https://arxiv.org/abs/1502.05767&quot;&gt;Baydin et al.&lt;/a&gt;, which heavily influenced my presentation.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Thanks for Kartik Agaram, Ben Liblit, and David Cabana for catching typos and errors.&lt;/em&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Fairification: Making Unfair Programs Fair</title>
-   <link href="http://barghouthi.github.io/2017/05/01/debiasing/"/>
+   <link href="http://localhost:4000/2017/05/01/debiasing/"/>
    <updated>2017-05-01T00:00:00-05:00</updated>
-   <id>http://barghouthi.github.io/2017/05/01/debiasing</id>
+   <id>http://localhost:4000/2017/05/01/debiasing</id>
    <content type="html">&lt;p&gt;Over the past year, we have been exploring the notion of &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf&quot;&gt;&lt;em&gt;algorithmic fairness&lt;/em&gt; from a PL/verification perspective&lt;/a&gt;.
 Today I’m going to talk about a new paper we have that is appearing at CAV 2017: &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/cav17.pdf&quot;&gt;&lt;em&gt;Repairing Decision-making Programs under Uncertainty&lt;/em&gt;&lt;/a&gt;, with Samuel Drews and Loris D’Antoni.&lt;/p&gt;
 
@@ -335,9 +337,9 @@ about fairness in data analysis environments?&lt;/em&gt;&lt;/p&gt;
  
  <entry>
    <title>A Program Synthesis Primer</title>
-   <link href="http://barghouthi.github.io/2017/04/24/synthesis-primer/"/>
+   <link href="http://localhost:4000/2017/04/24/synthesis-primer/"/>
    <updated>2017-04-24T00:00:00-05:00</updated>
-   <id>http://barghouthi.github.io/2017/04/24/synthesis-primer</id>
+   <id>http://localhost:4000/2017/04/24/synthesis-primer</id>
    <content type="html">&lt;p&gt;My colleague Somesh Jha recently asked me to give a lecture on &lt;em&gt;program synthesis&lt;/em&gt; to his class.
 As I prepared my notes, I realized that a single lecture is long enough to formally define the problem and code up some cool examples
 that demonstrate the process.

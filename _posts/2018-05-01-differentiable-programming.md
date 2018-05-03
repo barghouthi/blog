@@ -49,7 +49,7 @@ If you plot this function, you get the following spooky graph:
 If you remember your calculus, the partial derivative of a function $\frac{\partial f}{\partial x}$ is essentially the rate of change of the output $y$ as $x$ changes.
 For our function $f$,
 
-$$\frac{\partial f}{\partial x}(x) = 2x + sin(x)$$
+$$\frac{\partial f}{\partial x}(x) = 2x - 2x \times sin(x)$$
 
 Notice that  $\frac{\partial f}{\partial x}(0) = 0$,
 since  $x = 0$ is a *stationary point*, so the rate of change at that point is 0.
@@ -108,16 +108,16 @@ That is, the rate of change of $v_1$ is the sum of the rates of change of $v_2$ 
 
 $$\partial\textit{post}(v_1 \gets v_2 \times v_3, s) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)][\dot v_1 \mapsto \dot v_2 \times v_3 + v_2 \times \dot v_3]$$
 
-In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of $v_2$, scaled by $v_1$, plus the rate of change of $v_3$, scaled by $v_2$.
+In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of $v_2$, scaled by $v_3$, plus the rate of change of $v_3$, scaled by $v_2$.
 
 
 
-**Trignometric functions** For cosine, we have
+**Trigonometric functions** For cosine, we have
 
-$$\partial\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times sin(s(v_2))]$$
+$$\partial\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times - sin(s(v_2))]$$
 
 This follows from the *chain rule*, which says that the rate of change of $f(u)$ is the rate of change of $f$ scaled by the rate of change of its argument $u$.
-You might remember that derivative of $cos(x)$ is $sin(x)$, so, following the chain rule, we simply scale $cos(v_2)$ by $\dot v_2$.
+You might remember that the derivative of $cos(x)$ is $-sin(x)$, so, following the chain rule, we simply scale $-sin(v_2)$ by $\dot v_2$.
 
 ## Example continued
 
@@ -146,3 +146,5 @@ $$
 ## Notes
 
 I covered the simpler case of forward differentiation, which proceeds by executing the program in a forward manner. For functions with more than one input, it is more efficient to perform backward differentiation, which the popular *[backpropagation](https://en.wikipedia.org/wiki/Backpropagation)* algorithm is an instance of. Adapting the above semantics to backpropagation is not hard, it's just messier, as we have to execute the program forward and then backward. Therefore, I decided to illustrate the forward mode only. For more information, I encourage you to read the excellent survey by [Baydin et al.](https://arxiv.org/abs/1502.05767), which heavily influenced my presentation.
+
+*Thanks for Kartik Agaram, Ben Liblit, and David Cabana for catching typos and errors.*
