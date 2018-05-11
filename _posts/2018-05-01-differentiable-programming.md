@@ -147,4 +147,4 @@ $$
 
 I covered the simpler case of forward differentiation, which proceeds by executing the program in a forward manner. For functions with more than one input, it is more efficient to perform backward differentiation, which the popular *[backpropagation](https://en.wikipedia.org/wiki/Backpropagation)* algorithm is an instance of. Adapting the above semantics to backpropagation is not hard, it's just messier, as we have to execute the program forward and then backward. Therefore, I decided to illustrate the forward mode only. For more information, I encourage you to read the excellent survey by [Baydin et al.](https://arxiv.org/abs/1502.05767), which heavily influenced my presentation.
 
-*Thanks for Kartik Agaram, Ben Liblit, and David Cabana for catching typos and errors.*
+*Thanks to Kartik Agaram, Ben Liblit, and David Cabana for catching typos and errors.*
