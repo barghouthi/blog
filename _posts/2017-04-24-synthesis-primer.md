@@ -47,23 +47,22 @@ For illustration, let's look at an extremely simple example.
 The naive program is the following,
 where for simplicity we assume all `ints` are bitvectors with an 8-bit width.
 
-
-{% highlight python %}
+```python
 int p_naive(int x):
     y = x * 2
     return y
-{% endhighlight %}
+```
 
 You, as a smart (but not very smart) programmer, think
 that you can do better by writing a program of the following
 form, but you're not sure what to place in the `??`
 
 
-{% highlight python %}
+```python
 int p_smart(int x):
     y = x << ?? // the operator << is shift left
     return y
-{% endhighlight %}
+```
 
 In a sense, `p_smart` represents a family
 of programs---all possible instantiations of the *hole* `??`.
@@ -150,23 +149,24 @@ as 8-bitvectors.
 *The code for this example is available
 on [GitHub](http://github.com/barghouthi/704examples/blob/master/synthesis/synth.py)*
 
-{% highlight python %}
+```python
 x = BitVec('x',8)
 y = BitVec('y',8)
 h1 = BitVec('h',8)
-{% endhighlight %}
+```
 
 Next, we encode $ \varphi_n $ and $ \varphi_s $:
-{% highlight python %}
+
+```python
 phi_n = y == x * 2
 phi_s = y == x << h
-{% endhighlight %}
+```
 
 Finally, we are ready to invoke Z3:
 
 
 
-{% highlight python %}
+```python
 # first, encode the universally quantified formula
 # (the == symbol is if and only if)
 encoding = ForAll([x,y], phi_n == phi_s)
@@ -176,7 +176,7 @@ s.add(encoding)
 s.check()
 # print the model (i.e., the value of h)
 print s.model()
-{% endhighlight %}
+```
 
 If you run this code, you will get the output `[h = 1]`,
 just as expected!
@@ -200,7 +200,7 @@ position of the first 0 from the right occuring in `x`, and 0 everywhere else.[^
 For example,
 
 
-{% highlight python %}
+```python
 # test 1
 x = 00000000
 y = 00000001
@@ -210,14 +210,13 @@ y = 00000100
 # test 3
 x = 00000010
 y = 00000001
-{% endhighlight %}
+```
 
 Suppose you have the following hunch on how to write
 such a program efficiently:
-{% highlight python %}
+```python
 y = (~(x + ??)) & (x + ??)
-{% endhighlight %}
-
+```
 Here `~` is bitwise not and `&` is bitwise and.
 Our goal is to find solutions to the two holes
 that result in our desired program.
@@ -263,7 +262,7 @@ The process is similar to what we saw above:
 *The code for this example is available
 on [GitHub](http://github.com/barghouthi/704examples/blob/master/synthesis/synth_test.py)*
 
-{% highlight python %}
+```python
 phi_s = y == (~(x + h1)) & (x + h2)
 t1 = And(x == 0, y == 1)
 t2 = And(x == 1, y == 2)
@@ -271,7 +270,7 @@ t3 = And(x == 2, y == 1)
 phi_t = Or(t1,t2,t3)
 
 encoding = ForAll([x,y], Implies(phi_t, phi_s))
-{% endhighlight %}
+```
 
 Solving the formula `encoding`,
 we get `[h2 = 1, h1 = 0]`, which results in a correct program.
