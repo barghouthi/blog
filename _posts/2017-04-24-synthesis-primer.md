@@ -153,7 +153,7 @@ on [GitHub](http://github.com/barghouthi/704examples/blob/master/synthesis/synth
 {% highlight python %}
 x = BitVec('x',8)
 y = BitVec('y',8)
-h1 = BitVec('h',8)
+h = BitVec('h',8)
 {% endhighlight %}
 
 Next, we encode $ \varphi_n $ and $ \varphi_s $:
