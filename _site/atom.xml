@@ -4,13 +4,44 @@
  <title></title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2019-02-08T16:05:08-06:00</updated>
+ <updated>2019-07-16T15:44:50-05:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Aws Albarghouthi</name>
    <email>albargah@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Teaching Your SMT Solver Probability Theory</title>
+   <link href="http://localhost:4000/2019/07/15/smt-probability/"/>
+   <updated>2019-07-15T00:00:00-05:00</updated>
+   <id>http://localhost:4000/2019/07/15/smt-probability</id>
+   <content type="html">&lt;p&gt;The unexpected rise of SAT and SMT solvers has revolutionized software verification, both the automated and deductive flavors.
+Simply, you encode program semantics as logical circuits and ask the SMT solver questions about them. How elegant.
+But what happens when your program is randomized? Good luck! The first-order world of SMT solvers does not have the ingredients to sustain your stochastic existence. Go find another home.&lt;/p&gt;
+
+&lt;p&gt;In this post, I will show you how to teach your SMT solver probability theory.
+The ideas here are a simplified view of a recent &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/popl19.pdf&quot;&gt;POPL paper&lt;/a&gt; by my student &lt;a href=&quot;http://pages.cs.wisc.edu/~cjsmith/&quot;&gt;Calvin Smith&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;classical-verification&quot;&gt;Classical verification&lt;/h2&gt;
+
+&lt;p&gt;To ground things, I will start with a classical (non-probabilistic) verification problem and encode it as a formula first-order.
+Take this program:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If we’re working with infinite-precision integers, the following Hoare triple is valid:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\{x \geq 0} f(x) {y \geq 0}&lt;/script&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Differentiable Programming: A Semantics Perspective</title>
