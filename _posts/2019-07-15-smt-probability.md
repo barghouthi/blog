@@ -148,6 +148,8 @@ $$(\underbrace{x > 0}_{\text{pre}} \land \underbrace{?_1 \leq y \leq ?_2  \land 
 The idea is we want to find ($\exists$) solutions to the unknowns $?_1$ and $?_2$
 such that for any execution ($\forall$) where $x>0$ the postcondition holds and the failure probability is no more than $1/3$.
 
+A solution to this problem is one that sets $?_1$ to $x$ and $?_2$ to $3x$,
+resulting in the program `f_nondet` above, whose correctness implies the Hoare triple $$\vdash_{\color{red}{1/3}} \{x > 0\}  ~f(x)~ \{y \geq x\}$$.
 
 
 ## Conclusion
@@ -158,3 +160,5 @@ But that's not to say that solving the resulting formulas is easy!
 
 Our [paper](http://pages.cs.wisc.edu/~aws/papers/popl19.pdf) gives a full-blow, soundness-police-compliant view of this idea -- and a lot of implementation details because some of these formulas involve non-linear arithmetic and quantifier alternation. We manage to automatically prove accuracy properties of some sophisticated algorithms from the differential privacy literature.
 It's really fascinating how far we can take SMT solvers.
+
+*Thanks to Calvin Smith for comments on an earlier draft. I stole the figures from his slides.*

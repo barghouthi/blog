@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title></title>
- <link href="https://barghouthi.github.io/atom.xml" rel="self"/>
- <link href="https://barghouthi.github.io/"/>
- <updated>2019-07-17T12:42:25-05:00</updated>
- <id>https://barghouthi.github.io</id>
+ <link href="http://localhost:4000/atom.xml" rel="self"/>
+ <link href="http://localhost:4000/"/>
+ <updated>2019-07-17T14:06:12-05:00</updated>
+ <id>http://localhost:4000</id>
  <author>
    <name>Aws Albarghouthi</name>
    <email>albargah@gmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Teaching Your SMT Solver Probability Theory</title>
-   <link href="https://barghouthi.github.io/2019/07/15/smt-probability/"/>
+   <link href="http://localhost:4000/2019/07/15/smt-probability/"/>
    <updated>2019-07-15T00:00:00-05:00</updated>
-   <id>https://barghouthi.github.io/2019/07/15/smt-probability</id>
+   <id>http://localhost:4000/2019/07/15/smt-probability</id>
    <content type="html">&lt;p&gt;The unexpected rise of SAT and SMT solvers has revolutionized software verification, both the automated and deductive flavors.
 Simply, you encode program semantics as logical circuits and ask the SMT solver questions about them. How elegant.
 But what happens when your program is randomized? Good luck! The first-order world of SMT solvers does not have the ingredients to sustain your stochastic existence. Go find another home.&lt;/p&gt;
@@ -64,7 +64,7 @@ Take this program:&lt;/p&gt;
 
 &lt;p&gt;This Hoare triple is intuitively valid: values of $y$ are uniformly distributed between $0$ and $3x$, so getting a value of $y \geq x$ has a failure probability of $1/3$.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/probability1.png&quot; alt=&quot;Probability density function&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/probability1.png&quot; alt=&quot;Probability density function&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Cool. But we want to automatically establish this Hoare triple with an SMT solver.
 How? We’ll get rid of probability. Adios!&lt;/p&gt;
@@ -115,7 +115,7 @@ Check out this parameterized version of &lt;code class=&quot;highlighter-rouge&q
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;?1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;?2&lt;/code&gt; are two unknown expressions that we want to synthesize; they define the assumption we are making.
 Depending on what we choose, we will &lt;em&gt;incur&lt;/em&gt; a different probability of failure &lt;code class=&quot;highlighter-rouge&quot;&gt;w&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/probability2.png&quot; alt=&quot;Probability density function of axiom family&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/probability2.png&quot; alt=&quot;Probability density function of axiom family&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;So now you can use your favorite program synthesis engine to synthesize values for the unknowns such that the postcondition &lt;script type=&quot;math/tex&quot;&gt;y \geq x&lt;/script&gt; is true and
 and the failure probability $w \leq 1/3$. 
@@ -153,6 +153,9 @@ we encode the problem in the form of &lt;script type=&quot;math/tex&quot;&gt;\ex
 &lt;p&gt;The idea is we want to find ($\exists$) solutions to the unknowns $?_1$ and $?_2$
 such that for any execution ($\forall$) where $x&amp;gt;0$ the postcondition holds and the failure probability is no more than $1/3$.&lt;/p&gt;
 
+&lt;p&gt;A solution to this problem is one that sets $?_1$ to $x$ and $?_2$ to $3*x$,
+resulting in the program &lt;code class=&quot;highlighter-rouge&quot;&gt;f_nondet&lt;/code&gt; above, whose correctness implies the Hoare triple &lt;script type=&quot;math/tex&quot;&gt;\vdash_{\color{red}{1/3}} \{x &gt; 0\}  ~f(x)~ \{y \geq x\}&lt;/script&gt;.&lt;/p&gt;
+
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;That’s it. We’ve thrown probability away. 
@@ -173,9 +176,9 @@ It’s really fascinating how far we can take SMT solvers.&lt;/p&gt;
  
  <entry>
    <title>Differentiable Programming: A Semantics Perspective</title>
-   <link href="https://barghouthi.github.io/2018/05/01/differentiable-programming/"/>
+   <link href="http://localhost:4000/2018/05/01/differentiable-programming/"/>
    <updated>2018-05-01T00:00:00-05:00</updated>
-   <id>https://barghouthi.github.io/2018/05/01/differentiable-programming</id>
+   <id>http://localhost:4000/2018/05/01/differentiable-programming</id>
    <content type="html">&lt;p&gt;So deep learning has taken the world by storm.
 Frameworks for training deep neural networks, like &lt;a href=&quot;https://www.tensorflow.org/&quot;&gt;TensorFlow&lt;/a&gt;, allow you to construct so-called &lt;em&gt;differentiable programs&lt;/em&gt;.
 The idea is that one can compute the derivative of some program (usually some neural net), and then use that to optimize its parameters.&lt;/p&gt;
@@ -215,7 +218,7 @@ y &amp;\gets v_1 + v_2
 \end{align*} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;If you plot this function, you get the following spooky graph:
-&lt;img src=&quot;https://barghouthi.github.io/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://localhost:4000/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you remember your calculus, the partial derivative of a function $\frac{\partial f}{\partial x}$ is essentially the rate of change of the output $y$ as $x$ changes.
 For our function $f$,&lt;/p&gt;
@@ -315,9 +318,9 @@ y &amp;\gets v_1 + v_2\\
  
  <entry>
    <title>Fairification: Making Unfair Programs Fair</title>
-   <link href="https://barghouthi.github.io/2017/05/01/debiasing/"/>
+   <link href="http://localhost:4000/2017/05/01/debiasing/"/>
    <updated>2017-05-01T00:00:00-05:00</updated>
-   <id>https://barghouthi.github.io/2017/05/01/debiasing</id>
+   <id>http://localhost:4000/2017/05/01/debiasing</id>
    <content type="html">&lt;p&gt;Over the past year, we have been exploring the notion of &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf&quot;&gt;&lt;em&gt;algorithmic fairness&lt;/em&gt; from a PL/verification perspective&lt;/a&gt;.
 Today I’m going to talk about a new paper we have that is appearing at CAV 2017: &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/cav17.pdf&quot;&gt;&lt;em&gt;Repairing Decision-making Programs under Uncertainty&lt;/em&gt;&lt;/a&gt;, with Samuel Drews and Loris D’Antoni.&lt;/p&gt;
 
@@ -496,9 +499,9 @@ about fairness in data analysis environments?&lt;/em&gt;&lt;/p&gt;
  
  <entry>
    <title>A Program Synthesis Primer</title>
-   <link href="https://barghouthi.github.io/2017/04/24/synthesis-primer/"/>
+   <link href="http://localhost:4000/2017/04/24/synthesis-primer/"/>
    <updated>2017-04-24T00:00:00-05:00</updated>
-   <id>https://barghouthi.github.io/2017/04/24/synthesis-primer</id>
+   <id>http://localhost:4000/2017/04/24/synthesis-primer</id>
    <content type="html">&lt;p&gt;My colleague Somesh Jha recently asked me to give a lecture on &lt;em&gt;program synthesis&lt;/em&gt; to his class.
 As I prepared my notes, I realized that a single lecture is long enough to formally define the problem and code up some cool examples
 that demonstrate the process.
