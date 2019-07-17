@@ -4,7 +4,7 @@
  <title></title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2019-07-17T09:08:15-05:00</updated>
+ <updated>2019-07-17T09:59:09-05:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Aws Albarghouthi</name>
@@ -28,7 +28,7 @@ The ideas here are a simplified view of a recent &lt;a href=&quot;http://pages.c
 
 &lt;h2 id=&quot;classical-verification&quot;&gt;Classical verification&lt;/h2&gt;
 
-&lt;p&gt;To ground things, I will start with a classical (non-probabilistic) verification problem and encode it as a formula first-order.
+&lt;p&gt;To ground things, I will start with a classical (non-probabilistic) verification problem and encode it as a formula in first-order logic.
 Take this program:&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -43,7 +43,7 @@ Take this program:&lt;/p&gt;
 
 &lt;p&gt;To formally prove that this Hoare triple holds, we encode the precondition, postcondition, and program semantics as the following formula:&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;(\underbrace{x &gt; 0}_{\text{pre}} \land \underbrace{z = x + 1 \land y = z * 2}_{\text{encoding of } f}) \Longrightarrow \underbrace{y &gt; 0}_{\text{post}}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;(\underbrace{x &gt; 0}_{\text{pre}} \land \underbrace{z = x + 1 \land y = z * 2}_{\text{encoding of } f \ (\text{strongest post})}) \Longrightarrow \underbrace{y &gt; 0}_{\text{post}}&lt;/script&gt;
 
 &lt;p&gt;If the SMT solver tells you that the formula is valid, then the Hoare triple is valid. If it’s not valid, the SMT solver will give you a counterexample.&lt;/p&gt;
 
@@ -67,11 +67,14 @@ Take this program:&lt;/p&gt;
 &lt;p&gt;Cool. But we want to automatically establish this Hoare triple with an SMT solver.
 How? We’ll get rid of probability. Adios!&lt;/p&gt;
 
-&lt;h2 id=&quot;turning-probability-to-non-determinism&quot;&gt;Turning probability to non-determinism&lt;/h2&gt;
+&lt;h2 id=&quot;turning-sampling-into-non-determinism&quot;&gt;Turning sampling into non-determinism&lt;/h2&gt;
 
 &lt;p&gt;The idea is that the SMT solver needs to only know a few &lt;em&gt;axioms&lt;/em&gt; about the probability distributions in order to construct the proof.
-In our example, the proof relies on the obvious fact that $y \geq x$ with a probability of $2/3$.
-If we know this fact, we can transform the program into a non-deterministic version that &lt;em&gt;tracks probability of failure&lt;/em&gt;:&lt;/p&gt;
+In our example, the proof relies on the obvious fact that $y \geq x$ with a probability of $2/3$.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/probability1.png&quot; alt=&quot;Probability density function&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If we know this fact, we can transform the program into a non-deterministic version that &lt;em&gt;tracks probability of failure&lt;/em&gt;:&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;f_new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pick&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
@@ -93,6 +96,42 @@ The transformation relies on the following insight:&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;(\underbrace{x &gt; 0}_{\text{pre}} \land \underbrace{x \leq y \leq 3x  \land w = 1/3}_{\text{encoding of } f_\textit{new}}) \Longrightarrow (\underbrace{y &gt; x}_{\text{post}} \land \underbrace{w \leq \color{red}{1/3}}_{\text{failure prob.}})&lt;/script&gt;
 
+&lt;h2 id=&quot;picking-the-right-axioms&quot;&gt;Picking the right axioms&lt;/h2&gt;
+
+&lt;p&gt;In our example, we gave the SMT solver exactly the axiom it needs to know about the uniform distribution. 
+But in general, we want to automatically discover the right axiom to get the proof to go through. 
+Calvin’s insight was that we can see this as a &lt;em&gt;program synthesis&lt;/em&gt; problem!&lt;/p&gt;
+
+&lt;p&gt;The idea is to use an &lt;em&gt;axiom family&lt;/em&gt; and synthesize the appropriate axiom from this family.
+Check out this parameterized version of &lt;code class=&quot;highlighter-rouge&quot;&gt;f_new&lt;/code&gt; above:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;f_synth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pick&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;?1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;?2&lt;/code&gt; are two unknown expressions that we want to synthesize; they define the assumption we are making.
+Depending on what we choose, we will &lt;em&gt;incur&lt;/em&gt; a different probability of failure &lt;code class=&quot;highlighter-rouge&quot;&gt;w&lt;/code&gt;.
+So now you can use your favorite program synthesis engine to synthesize values for the unknowns such that &lt;script type=&quot;math/tex&quot;&gt;y \geq x&lt;/script&gt; and $w \leq 1/3$.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/probability2.png&quot; alt=&quot;Probability density function of axiom family&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Say we pick &lt;code class=&quot;highlighter-rouge&quot;&gt;2*x&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;3*x&lt;/code&gt; for &lt;code class=&quot;highlighter-rouge&quot;&gt;?1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;?2&lt;/code&gt;.
+We get the following program:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;f_synth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pick&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This proves our postcondition—that $y \geq  x$—but with a failure probability of $2/3$ (higher than our goal of $1/3$).&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Our paper gives a soundness-police-compliant view of this idea. We manage to automatically prove accuracy properties of some sophisticated algorithms from differential privacy.
+It’s really fascinating how far we can take SMT solvers.&lt;/p&gt;
 </content>
  </entry>
  

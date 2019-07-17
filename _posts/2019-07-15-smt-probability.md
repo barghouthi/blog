@@ -14,7 +14,7 @@ The ideas here are a simplified view of a recent [POPL paper](http://pages.cs.wi
 
 ## Classical verification
 
-To ground things, I will start with a classical (non-probabilistic) verification problem and encode it as a formula first-order.
+To ground things, I will start with a classical (non-probabilistic) verification problem and encode it as a formula in first-order logic.
 Take this program:
 
 ```python
@@ -44,13 +44,18 @@ def f(x):
     return y
 ```
 
-Say we want to prove the following (probabilistic) Hoare triple:
+Say we want to prove the following (probabilistic) Hoare triple:[^union-bound]
+
+[^union-bound]: Notation from union bound logic, a probabilistic Hoare logic due to [Barthe et al.](https://arxiv.org/abs/1602.05681)
 
 $$\vdash_{\color{red}{1/3}} \{x > 0\}  ~f(x)~ \{y \geq x\}$$
 
 Let's unpack this: If $x$ is positive, then $f$ returns a value of $y \geq x$, *but* there is at most a $\color{red}{1/3}$ probability of failure.
 
 This Hoare triple is intuitively valid: values of $y$ are uniformly distributed between $0$ and $3x$, so getting a value of $y \geq x$ has a failure probability of $1/3$.
+
+![Probability density function]({{site.url}}/assets/probability1.png)
+
 
 Cool. But we want to automatically establish this Hoare triple with an SMT solver.
 How? We'll get rid of probability. Adios!
@@ -60,7 +65,7 @@ How? We'll get rid of probability. Adios!
 The idea is that the SMT solver needs to only know a few *axioms* about the probability distributions in order to construct the proof.
 In our example, the proof relies on the obvious fact that $y \geq x$ with a probability of $2/3$.
 
-![Probability density function]({{site.url}}/assets/probability1.png)
+
 
 If we know this fact, we can transform the program into a non-deterministic version that *tracks probability of failure*:
 
@@ -116,9 +121,9 @@ def f_synth(x):
     return y,w
 ```
 
-This proves our postcondition---that $y \geq  x$---but with a failure probability of $2/3$ (higher than our goal of $1/3$).
+This satisfies our postcondition---that $y \geq  x$---but with a failure probability of $2/3$ (higher than our goal of $1/3$).
 
 ## Conclusion
 
-Our paper gives a soundness-police-compliant view of this idea. We manage to automatically prove accuracy properties of some sophisticated algorithms from differential privacy.
+Our [paper](http://pages.cs.wisc.edu/~aws/papers/popl19.pdf) gives a soundness-police-compliant view of this idea. We manage to automatically prove accuracy properties of some sophisticated algorithms from differential privacy.
 It's really fascinating how far we can take SMT solvers.
