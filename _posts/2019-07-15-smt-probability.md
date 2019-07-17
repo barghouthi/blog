@@ -114,13 +114,23 @@ Say we pick `2*x` and `3*x` for `?1` and `?2`.
 We get the following program:
 
 ```python
-def f_synth_inst(x):
+def f_synth_inst1(x):
     y = pick a value in [2*x,...,3*x]
     w = 2/3
     return y,w
 ```
 
 This satisfies our postcondition --- that $y \geq  x$ --- but with a failure probability of $2/3$, higher than our goal of $1/3$.
+
+Now check out this other instantiation where we set `?1` to 0 and `?2` to `3*x`:
+```python
+def f_synth_inst2(x):
+    y = pick a value in [0,...,3*x]
+    w = 0
+    return y,w
+```
+This has a 0 probability of failure: `y` always is between `0` and `3*x` with a probability of 1. But it does not satisfy the postcondition, since `y` may very well be less than `x`. 
+
 The synthesizer should return the program `f_nondet` above,
 which sets `?1` to `x` and `?2` to `3*x`.
 
