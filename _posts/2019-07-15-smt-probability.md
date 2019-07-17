@@ -36,7 +36,7 @@ If the SMT solver tells you that the formula is valid, then the Hoare triple is 
 
 ## Randomized algorithm example
 
-Let's now look at a very simple randomized program, where `uniform(a,b)` returns a sample from the uniform distribution between values `a` and `b`. 
+Let's now look at a very simple randomized program, where `uniform(a,b)` returns a sample from the uniform distribution between the values `a` and `b`. 
 
 ```python
 def f(x):
@@ -77,12 +77,13 @@ def f_nondet(x):
 ```
 
 We now have a non-probabilistic program:
-`y`  gets an arbitrary (non-deterministic) value between `x` and `3*x`;
-but we know that this may not be true with a probability of `1/3`, which is stored in a new *ghost* variable `w`.
+we force 
+`y` to receive an arbitrary (non-deterministic) value between `x` and `3*x`;
+but we know that this may not be true with a probability of `1/3`, so we store this fact in a new *ghost* variable `w`.
 The transformation relies on the following insight:
 
-1. make whatever assumptions you want
-2. *but* remember the probability with which your assumptions might fail
+1. make whatever assumptions you want about the value of `y`
+2. *but* remember the probability with which your assumption might fail
 
 So now we can prove the above Hoare triple $$\vdash_{\color{red}{1/3}} \{x > 0\}  ~f(x)~ \{y \geq x\}$$  using the transformed, non-deterministic program instead:
 
@@ -109,7 +110,8 @@ Depending on what we choose, we will *incur* a different probability of failure 
 
 ![Probability density function of axiom family]({{site.url}}/assets/probability2.png)
 
-So now you can use your favorite program synthesis engine to synthesize values for the unknowns such that $$y \geq x$$ and $w \leq 1/3$. 
+So now you can use your favorite program synthesis engine to synthesize values for the unknowns such that the postcondition $$y \geq x$$ is true and
+and the failure probability $w \leq 1/3$. 
 Say we pick `2*x` and `3*x` for `?1` and `?2`.
 We get the following program:
 
