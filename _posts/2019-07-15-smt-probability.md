@@ -122,7 +122,7 @@ def f_synth_inst1(x):
 
 This satisfies our postcondition --- that $y \geq  x$ --- but with a failure probability of $2/3$, higher than our goal of $1/3$.
 
-Now check out this other instantiation where we set `?1` to 0 and `?2` to `3*x`:
+Now check out this other instantiation where we set `?1` to `0` and `?2` to `3*x`:
 ```python
 def f_synth_inst2(x):
     y = pick a value in [0,...,3*x]
@@ -154,5 +154,5 @@ That's it. We've thrown probability away.
 Now you can reason about randomized algorithms with first-order logic.
 But that's not to say that solving the resulting formulas is easy!
 
-Our [paper](http://pages.cs.wisc.edu/~aws/papers/popl19.pdf) gives a full-blow, soundness-police-compliant view of this idea -- and a lot of implementation details because some of these formulas involve non-linear arithmetic. We manage to automatically prove accuracy properties of some sophisticated algorithms from the differential privacy literature.
+Our [paper](http://pages.cs.wisc.edu/~aws/papers/popl19.pdf) gives a full-blow, soundness-police-compliant view of this idea -- and a lot of implementation details because some of these formulas involve non-linear arithmetic and quantifier alternation. We manage to automatically prove accuracy properties of some sophisticated algorithms from the differential privacy literature.
 It's really fascinating how far we can take SMT solvers.
