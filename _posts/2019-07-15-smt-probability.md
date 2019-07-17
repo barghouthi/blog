@@ -24,7 +24,7 @@ def f(x):
     return y
 ```
 
-If we're working with infinite-precision integers, the following Hoare triple is valid---a positive input results in a positive output.
+If we're working with infinite-precision integers, the following Hoare triple is valid --- a positive input results in a positive output.
 
 $$\vdash \{x > 0\}  ~f(x)~ \{y > 0\}$$
 
@@ -70,7 +70,7 @@ In our example, the proof relies on the obvious fact that $y \geq x$ with a prob
 If we know this fact, we can transform the program into a non-deterministic version that *tracks probability of failure*:
 
 ```python
-def f_new(x):
+def f_nondet(x):
     y = pick a value in [x,...,3*x]
     w = 1/3
     return y,w
@@ -86,7 +86,7 @@ The transformation relies on the following insight:
 
 So now we can prove the above Hoare triple $$\vdash_{\color{red}{1/3}} \{x > 0\}  ~f(x)~ \{y \geq x\}$$  using the transformed, non-deterministic program instead:
 
-$$(\underbrace{x > 0}_{\text{pre}} \land \underbrace{x \leq y \leq 3x  \land w = 1/3}_{\text{encoding of } f_\textit{new}}) \Longrightarrow (\underbrace{y > x}_{\text{post}} \land \underbrace{w \leq \color{red}{1/3}}_{\text{failure prob.}})$$
+$$(\underbrace{x > 0}_{\text{pre}} \land \underbrace{x \leq y \leq 3x  \land w = 1/3}_{\text{encoding of } f_\textit{nondet}}) \Longrightarrow (\underbrace{y \geq x}_{\text{post}} \land \underbrace{w \leq \color{red}{1/3}}_{\text{failure prob.}})$$
 
 ## Picking the right axioms
 
@@ -95,7 +95,7 @@ But in general, we want to automatically discover the right axiom to get the pro
 Calvin's insight was that we can see this as a *program synthesis* problem!
 
 The idea is to use an *axiom family* and synthesize the appropriate axiom from this family.
-Check out this parameterized version of `f_new` above:
+Check out this parameterized version of `f_nondet` above:
 
 ```python
 def f_synth(x):
@@ -106,24 +106,43 @@ def f_synth(x):
 
 `?1` and `?2` are two unknown expressions that we want to synthesize; they define the assumption we are making.
 Depending on what we choose, we will *incur* a different probability of failure `w`.
-So now you can use your favorite program synthesis engine to synthesize values for the unknowns such that $$y \geq x$$ and $w \leq 1/3$. 
 
 ![Probability density function of axiom family]({{site.url}}/assets/probability2.png)
 
-
+So now you can use your favorite program synthesis engine to synthesize values for the unknowns such that $$y \geq x$$ and $w \leq 1/3$. 
 Say we pick `2*x` and `3*x` for `?1` and `?2`.
 We get the following program:
 
 ```python
-def f_synth(x):
+def f_synth_inst(x):
     y = pick a value in [2*x,...,3*x]
     w = 2/3
     return y,w
 ```
 
-This satisfies our postcondition---that $y \geq  x$---but with a failure probability of $2/3$ (higher than our goal of $1/3$).
+This satisfies our postcondition --- that $y \geq  x$ --- but with a failure probability of $2/3$, higher than our goal of $1/3$.
+The synthesizer should return the program `f_nondet` above,
+which sets `?1` to `x` and `?2` to `3*x`.
+
+## Synthesis problem
+
+To solve the synthesis problem above with an SMT solver,
+we encode the problem in the form of $$\exists.\forall .\varphi$$:
+
+$$\exists ?_1, ?_2 . \forall x,y,z,w .$$
+
+$$(\underbrace{x > 0}_{\text{pre}} \land \underbrace{?_1 \leq y \leq ?_2  \land w = 1 - (?_2-?_1)/3x }_{\text{encoding of } f_\textit{synth}}) \Longrightarrow (\underbrace{y \geq x}_{\text{post}} \land \underbrace{w \leq \color{red}{1/3}}_{\text{failure prob.}})$$
+
+The idea is we want to find ($\exists$) solutions to the unknowns $?_1$ and $?_2$
+such that for any execution ($\forall$) where $x>0$ the postcondition holds and the failure probability is no more than $1/3$.
+
+
 
 ## Conclusion
 
-Our [paper](http://pages.cs.wisc.edu/~aws/papers/popl19.pdf) gives a soundness-police-compliant view of this idea. We manage to automatically prove accuracy properties of some sophisticated algorithms from differential privacy.
+That's it. We've thrown probability away. 
+Now you can reason about randomized algorithms with first-order logic.
+But that's not to say that solving the resulting formulas is easy!
+
+Our [paper](http://pages.cs.wisc.edu/~aws/papers/popl19.pdf) gives a full-blow, soundness-police-compliant view of this idea -- and a lot of implementation details because some of these formulas involve non-linear arithmetic. We manage to automatically prove accuracy properties of some sophisticated algorithms from the differential privacy literature.
 It's really fascinating how far we can take SMT solvers.
