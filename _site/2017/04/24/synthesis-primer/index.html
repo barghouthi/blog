@@ -190,15 +190,15 @@ on <a href="http://github.com/barghouthi/704examples/blob/master/synthesis/synth
 
 <p>Finally, we are ready to invoke Z3:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># first, encode the universally quantified formula</span>
-<span class="c"># (the == symbol is if and only if)</span>
-<span class="n">encoding</span> <span class="o">=</span> <span class="n">ForAll</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">phi_n</span> <span class="o">==</span> <span class="n">phi_s</span><span class="p">)</span>
-<span class="c"># second, call Z3 and check if there is a model</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># first, encode the universally quantified formula
+# (the == symbol is if and only if)
+</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">ForAll</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">phi_n</span> <span class="o">==</span> <span class="n">phi_s</span><span class="p">)</span>
+<span class="c1"># second, call Z3 and check if there is a model
+</span><span class="n">s</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
 <span class="n">s</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
 <span class="n">s</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
-<span class="c"># print the model (i.e., the value of h)</span>
-<span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+<span class="c1"># print the model (i.e., the value of h)
+</span><span class="k">print</span> <span class="n">s</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>If you run this code, you will get the output <code class="highlighter-rouge">[h = 1]</code>,
@@ -220,15 +220,15 @@ position of the first 0 from the right occuring in <code class="highlighter-roug
 
 <p>For example,</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># test 1</span>
-<span class="n">x</span> <span class="o">=</span> <span class="mo">00000000</span>
-<span class="n">y</span> <span class="o">=</span> <span class="mo">00000001</span>
-<span class="c"># test 2</span>
-<span class="n">x</span> <span class="o">=</span> <span class="mo">00000011</span>
-<span class="n">y</span> <span class="o">=</span> <span class="mo">00000100</span>
-<span class="c"># test 3</span>
-<span class="n">x</span> <span class="o">=</span> <span class="mo">00000010</span>
-<span class="n">y</span> <span class="o">=</span> <span class="mo">00000001</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test 1
+</span><span class="n">x</span> <span class="o">=</span> <span class="mi">00000000</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">00000001</span>
+<span class="c1"># test 2
+</span><span class="n">x</span> <span class="o">=</span> <span class="mi">00000011</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">00000100</span>
+<span class="c1"># test 3
+</span><span class="n">x</span> <span class="o">=</span> <span class="mi">00000010</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">00000001</span>
 </code></pre></div></div>
 
 <p>Suppose you have the following hunch on how to write

@@ -30,7 +30,7 @@ $$\vdash \{x > 0\}  ~f(x)~ \{y > 0\}$$
 
 To formally prove that this Hoare triple holds, we encode the precondition, postcondition, and program semantics as the following formula:
 
-$$(\underbrace{x > 0}_{\text{pre}} \land \underbrace{z = x + 1 \land y = z * 2}_{\text{encoding of } f}) \Longrightarrow \underbrace{y > 0}_{\text{post}}$$
+$$(\underbrace{x > 0}_{\text{pre}} \land \underbrace{z = x + 1 \land y = z * 2}_{\text{encoding of } f \ (\text{strongest post})}) \Longrightarrow \underbrace{y > 0}_{\text{post}}$$
 
 If the SMT solver tells you that the formula is valid, then the Hoare triple is valid. If it's not valid, the SMT solver will give you a counterexample.
 
@@ -55,10 +55,13 @@ This Hoare triple is intuitively valid: values of $y$ are uniformly distributed 
 Cool. But we want to automatically establish this Hoare triple with an SMT solver.
 How? We'll get rid of probability. Adios!
 
-## Turning probability to non-determinism
+## Turning sampling into non-determinism
 
 The idea is that the SMT solver needs to only know a few *axioms* about the probability distributions in order to construct the proof.
 In our example, the proof relies on the obvious fact that $y \geq x$ with a probability of $2/3$.
+
+![Probability density function]({{site.url}}/assets/probability1.png)
+
 If we know this fact, we can transform the program into a non-deterministic version that *tracks probability of failure*:
 
 ```python
@@ -80,4 +83,42 @@ So now we can prove the above Hoare triple $$\vdash_{\color{red}{1/3}} \{x > 0\}
 
 $$(\underbrace{x > 0}_{\text{pre}} \land \underbrace{x \leq y \leq 3x  \land w = 1/3}_{\text{encoding of } f_\textit{new}}) \Longrightarrow (\underbrace{y > x}_{\text{post}} \land \underbrace{w \leq \color{red}{1/3}}_{\text{failure prob.}})$$
 
+## Picking the right axioms
 
+In our example, we gave the SMT solver exactly the axiom it needs to know about the uniform distribution. 
+But in general, we want to automatically discover the right axiom to get the proof to go through. 
+Calvin's insight was that we can see this as a *program synthesis* problem!
+
+The idea is to use an *axiom family* and synthesize the appropriate axiom from this family.
+Check out this parameterized version of `f_new` above:
+
+```python
+def f_synth(x):
+    y = pick a value in [?1,...,?2]
+    w = 1 - (?2 - ?1) / 3*x
+    return y,w
+```
+
+`?1` and `?2` are two unknown expressions that we want to synthesize; they define the assumption we are making.
+Depending on what we choose, we will *incur* a different probability of failure `w`.
+So now you can use your favorite program synthesis engine to synthesize values for the unknowns such that $$y \geq x$$ and $w \leq 1/3$. 
+
+![Probability density function of axiom family]({{site.url}}/assets/probability2.png)
+
+
+Say we pick `2*x` and `3*x` for `?1` and `?2`.
+We get the following program:
+
+```python
+def f_synth(x):
+    y = pick a value in [2*x,...,3*x]
+    w = 2/3
+    return y,w
+```
+
+This proves our postcondition---that $y \geq  x$---but with a failure probability of $2/3$ (higher than our goal of $1/3$).
+
+## Conclusion
+
+Our paper gives a soundness-police-compliant view of this idea. We manage to automatically prove accuracy properties of some sophisticated algorithms from differential privacy.
+It's really fascinating how far we can take SMT solvers.
