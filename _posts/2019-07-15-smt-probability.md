@@ -50,7 +50,7 @@ Say we want to prove the following (probabilistic) Hoare triple:[^union-bound]
 
 $$\vdash_{\color{red}{1/3}} \{x > 0\}  ~f(x)~ \{y \geq x\}$$
 
-Let's unpack this: If $x$ is positive, then $f$ returns a value of $y \geq x$, *but* there is at most a $\color{red}{1/3}$ probability of failure.
+Let's unpack this: If $x$ is positive, then $f$ returns a value of $y \geq x$, *but* there is at most a $\color{red}{1/3}$ probability of failing to satisfy the postcondition.
 
 This Hoare triple is intuitively valid: values of $y$ are uniformly distributed between $0$ and $3x$, so getting a value of $y \geq x$ has a failure probability of $1/3$.
 
@@ -83,7 +83,7 @@ but we know that this may not be true with a probability of `1/3`, so we store t
 The transformation relies on the following insight:
 
 1. make whatever assumptions you want about the value of `y`
-2. *but* remember the probability with which your assumption might fail
+2. *but* remember the probability with which your assumptions might fail
 
 So now we can prove the above Hoare triple $$\vdash_{\color{red}{1/3}} \{x > 0\}  ~f(x)~ \{y \geq x\}$$  using the transformed, non-deterministic program instead:
 
@@ -92,7 +92,7 @@ $$(\underbrace{x > 0}_{\text{pre}} \land \underbrace{x \leq y \leq 3x  \land w =
 ## Picking the right axioms
 
 In our example, we gave the SMT solver exactly the axiom it needs to know about the uniform distribution. 
-But in general, we want to automatically discover the right axiom to get the proof to go through. 
+But, in general, we want to automatically discover the right axiom to get the proof to go through. 
 Calvin's insight was that we can see this as a *program synthesis* problem!
 
 The idea is to use an *axiom family* and synthesize the appropriate axiom from this family.
