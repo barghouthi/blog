@@ -94,8 +94,8 @@ which formalizes  the 80–20
 rule of thumb from the Equality of Employment
 Commission here in the US:</p>
 
-<script type="math/tex; mode=display">\frac{Pr [hire | minority]}
-{Pr [hire | \neg minority]} > 0.8</script>
+\[\frac{Pr [hire | minority]}
+{Pr [hire | \neg minority]} &gt; 0.8\]
 
 <p>The intuition is simple: the probability
 of hiring from the minority applicant pool
@@ -126,8 +126,8 @@ on average; minorities go to schools
 ranked 15 on average (here $min$
 is 1 for minority and 0 for non-minority).</p>
 
-<script type="math/tex; mode=display">min \sim Bernoulli(0.1)\\
-urank \sim Gaussian(10 + 5*min, 10)</script>
+\[min \sim Bernoulli(0.1)\\
+urank \sim Gaussian(10 + 5*min, 10)\]
 
 <p>With this population model,
 this program is unfair; on the above
@@ -140,7 +140,7 @@ First, we characterize a class
 of programs using a <em>sketch</em>
 (I talked about sketches in the last <a href="/2017/04/24/synthesis-primer/">post</a>).
 One possible sketch here is the following,
-where <code class="highlighter-rouge">??</code> are unknowns.</p>
+where <code class="language-plaintext highlighter-rouge">??</code> are unknowns.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hire</span><span class="p">(</span><span class="n">urank</span><span class="p">):</span>
    <span class="k">return</span> <span class="err">??</span> <span class="o">&lt;=</span> <span class="n">urank</span> <span class="o">&lt;=</span> <span class="err">??</span>
