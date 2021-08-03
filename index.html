@@ -4,16 +4,14 @@ title: Home
 ---
 
 <br><br>
-<b>Blog Posts</b><br>
-    <a href = "http://cs.wisc.edu/~aws" STYLE="color: black; text-decoration:none">Aws Albarghouthi</a><br>
-  <hr></hr>
-
+<b>✏️   Blog</b><br>
+    <a href = "http://cs.wisc.edu/~aws" STYLE="color: black; text-decoration:none">Aws Albarghouthi</a><br><br>
   {% for post in site.posts %}
     <a href="{{ site.baseurl }}{{ post.url }}">
           {{ post.title }}</a>
     &nbsp;  
     <time datetime="{{ post.date | date_to_xmlschema }}" class="post-date">{{ post.date | date: "%B  %Y" }}</time>
-    <br>  
+    <br>
     
   {% endfor %}
 
