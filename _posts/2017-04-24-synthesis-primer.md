@@ -86,18 +86,21 @@ First, let's try to gradually formalize the problem.
 We will use the variable ``h``
 to denote the hole `??`.
 
-**Definition 1** *Find a value* for `h`
+### Definition 1
+Find a value* for `h`
 such that *for all values* of `x`,
 `p_naive(x) == p_smart(x)`.
 
-**Definition 2**  We can think of `h` as
+### Definition 2
+We can think of `h` as
 an input to `p_smart`.
 So, our goal is really to
 *find a value* for `h`
 such that *for all values* of `x`,
 `p_naive(x) == p_smart(x,h)`.
 
-**Definition 3** Now, we can view a program, say, `p_naive`,
+### Definition 3
+Now, we can view a program, say, `p_naive`,
 as a logical relation $ \varphi_n(x,y) $
 over its input and output variables, $ x $ and $ y $.
 The idea is that the relation is true if and only
@@ -110,7 +113,7 @@ we have
 $ \varphi_n(x,y) \iff \varphi_s(x,h,y) $
 is true.
 
-**Final definition**
+### Final definition
 Finally, we are ready to state the problem logically.
 Find a satisfying assignment of the following formula
 $$

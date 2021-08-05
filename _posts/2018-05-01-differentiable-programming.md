@@ -89,22 +89,26 @@ Finally, when the program terminates with the new semantics, we can recover the 
 
 *Note that, by definition, $\dot x = 1$.*
 
-**Sequential composition** For sequential composition, $P_1;P_2$, $\partial\textit{post}$ behaves just like $\textit{post}$.
+### Sequential composition
+For sequential composition, $P_1;P_2$, $\partial\textit{post}$ behaves just like $\textit{post}$.
 
-**Constant assignment** For the constant assignment $v_1 \gets c$,
+### Constant assignment 
+For the constant assignment $v_1 \gets c$,
 we have
 
 $$\partial\textit{post}(v_1 \gets c, s) \triangleq s[v_1 \mapsto c][ \dot v_1 \mapsto 0]$$
 
 In other words, the rate of change of $v_1$ is zero, since it's not dependent on $x$ in any way.
 
-**Addition** For addition, we have
+### Addition
+For addition, we have
 
 $$\partial\textit{post}(v_1 \gets v_2 + v_3, s) \triangleq s[v \mapsto s(v_1) + s(v_2)][ \dot v \mapsto s(\dot v_1) + s(\dot v_2)]$$
 
 That is, the rate of change of $v_1$ is the sum of the rates of change of $v_2$ and $v_3$.
 
-**Multiplication** For multiplication,
+### Multiplication
+ For multiplication,
 
 $$\partial\textit{post}(v_1 \gets v_2 \times v_3, s) \triangleq s[v_1 \mapsto s(v_2) \times s(v_3)][\dot v_1 \mapsto \dot v_2 \times v_3 + v_2 \times \dot v_3]$$
 
@@ -112,7 +116,8 @@ In other words, the rate of change of $v_1$ w.r.t. $x$ is the rate of change of 
 
 
 
-**Trigonometric functions** For cosine, we have
+### Trigonometric functions
+ For cosine, we have
 
 $$\partial\textit{post}(v_1 \gets cos(v_2), s) \triangleq s[v \mapsto cos(s(v_2))] [\dot v \mapsto \dot v_2 \times - sin(s(v_2))]$$
 

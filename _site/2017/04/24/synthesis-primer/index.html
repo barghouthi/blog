@@ -119,18 +119,21 @@ off-the-shelf solver—as we will see in a bit.</p>
 We will use the variable <code class="language-plaintext highlighter-rouge">h</code>
 to denote the hole <code class="language-plaintext highlighter-rouge">??</code>.</p>
 
-<p><strong>Definition 1</strong> <em>Find a value</em> for <code class="language-plaintext highlighter-rouge">h</code>
+<h3 id="definition-1">Definition 1</h3>
+<p>Find a value* for <code class="language-plaintext highlighter-rouge">h</code>
 such that <em>for all values</em> of <code class="language-plaintext highlighter-rouge">x</code>,
 <code class="language-plaintext highlighter-rouge">p_naive(x) == p_smart(x)</code>.</p>
 
-<p><strong>Definition 2</strong>  We can think of <code class="language-plaintext highlighter-rouge">h</code> as
+<h3 id="definition-2">Definition 2</h3>
+<p>We can think of <code class="language-plaintext highlighter-rouge">h</code> as
 an input to <code class="language-plaintext highlighter-rouge">p_smart</code>.
 So, our goal is really to
 <em>find a value</em> for <code class="language-plaintext highlighter-rouge">h</code>
 such that <em>for all values</em> of <code class="language-plaintext highlighter-rouge">x</code>,
 <code class="language-plaintext highlighter-rouge">p_naive(x) == p_smart(x,h)</code>.</p>
 
-<p><strong>Definition 3</strong> Now, we can view a program, say, <code class="language-plaintext highlighter-rouge">p_naive</code>,
+<h3 id="definition-3">Definition 3</h3>
+<p>Now, we can view a program, say, <code class="language-plaintext highlighter-rouge">p_naive</code>,
 as a logical relation $ \varphi_n(x,y) $
 over its input and output variables, $ x $ and $ y $.
 The idea is that the relation is true if and only
@@ -143,8 +146,8 @@ we have
 $ \varphi_n(x,y) \iff \varphi_s(x,h,y) $
 is true.</p>
 
-<p><strong>Final definition</strong>
-Finally, we are ready to state the problem logically.
+<h3 id="final-definition">Final definition</h3>
+<p>Finally, we are ready to state the problem logically.
 Find a satisfying assignment of the following formula
 \(\forall x,y \ldotp \varphi_n(x,y) \iff \varphi_s(x,h,y)\)
 Notice that the variable $ h $
