@@ -7,10 +7,11 @@ title: Home
 <b>✏️   Blog</b><br>
     <a href = "http://cs.wisc.edu/~aws" STYLE="color: black; text-decoration:none">Aws Albarghouthi</a><br><br>
   {% for post in site.posts %}
+      <time datetime="{{ post.date | date_to_xmlschema }}" class="post-date">{{ post.date | date: "%m.%y" }}</time>
+  &nbsp;
     <a href="{{ site.baseurl }}{{ post.url }}">
           {{ post.title }}</a>
     &nbsp;  
-    <time datetime="{{ post.date | date_to_xmlschema }}" class="post-date">{{ post.date | date: "%B  %Y" }}</time>
     <br>
     
   {% endfor %}

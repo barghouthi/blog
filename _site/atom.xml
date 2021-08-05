@@ -4,7 +4,7 @@
  <title></title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2021-08-05T14:39:13-05:00</updated>
+ <updated>2021-08-05T16:29:31-05:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Aws Albarghouthi</name>
@@ -17,17 +17,18 @@
    <link href="http://localhost:4000/2021/08/05/quantum/"/>
    <updated>2021-08-05T00:00:00-05:00</updated>
    <id>http://localhost:4000/2021/08/05/quantum</id>
-   <content type="html">&lt;p&gt;Today we’re going to write a quantum circuit interpreter (or &lt;em&gt;simulator&lt;/em&gt;) using just 27 lines of Python.&lt;/p&gt;
+   <content type="html">&lt;p&gt;We’re going to write a quantum circuit interpreter (or &lt;em&gt;simulator&lt;/em&gt;) using just 27 lines of Python!&lt;/p&gt;
 
-&lt;p&gt;To understand this post, all you need to know is matrix multiplication. I’ll walk you through the rest! We’re going to treat operations of a quantum computer as yet another programming language for which we want to build an interpreter. So we won’t get too much into quantum mechanics or fancy quantum algorithms.&lt;/p&gt;
+&lt;p&gt;To understand this post, you don’t need to know anything about quantum computing. All you need to know is matrix multiplication! I’ll walk you through the rest! We’re going to treat operations of a quantum computer as yet another programming language for which we want to build an interpreter. So we won’t get too much into quantum mechanics or fancy quantum algorithms.&lt;/p&gt;
 
 &lt;p&gt;You can find the entire simulator code at the &lt;a href=&quot;#the-entire-quantum-circuit-simulator&quot;&gt;bottom&lt;/a&gt; of this post,
-or as a &lt;a href=&quot;notebook&quot;&gt;notebook&lt;/a&gt;.&lt;/p&gt;
+or as a &lt;a href=&quot;https://colab.research.google.com/drive/1sP64Lt0OFpXZOeycK4MaFpqRPHh79VEU?usp=sharing&quot;&gt;notebook&lt;/a&gt;.&lt;/p&gt;
 
 &lt;hr /&gt;
 
 &lt;h2 id=&quot;classical-circuits&quot;&gt;Classical circuits&lt;/h2&gt;
-&lt;p&gt;We will begin by writing an interpreter for classical circuits—you know, &lt;em&gt;not&lt;/em&gt;, &lt;em&gt;and&lt;/em&gt;, &lt;em&gt;or&lt;/em&gt;. Then, we will generalize our interpreter to quantum circuits. A classical circuit in our setting applies logical operations to $n$ bits.&lt;/p&gt;
+&lt;p&gt;We will begin by writing an interpreter for classical circuits—you know,
+good old &lt;em&gt;not&lt;/em&gt;, &lt;em&gt;and&lt;/em&gt;, &lt;em&gt;or&lt;/em&gt;. Then, we will generalize our interpreter to quantum circuits. A classical circuit in our setting applies logical operations to $n$ bits.&lt;/p&gt;
 
 &lt;h3 id=&quot;classical-state&quot;&gt;Classical state&lt;/h3&gt;
 &lt;p&gt;Let’s begin by representing the state of $n$ bits. We’ll do this in an unusual way. We will define a vector of size $2^n$ where each index of the vector represents one possible configuration of the $n$ bits. 
@@ -35,15 +36,14 @@ For $n=1$ we have a vector of size 2, e.g.:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/classic1.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;The vector is in black; the numbers in pink (left) are the indices. The vector above therefore represents that the bit is 1, since at index 1 
-we have a have 1.
+&lt;p&gt;The vector is in black; the numbers in pink (left) are the indices. The vector above therefore represents a  bit that is 1, since it has element 1 at index 1.
 Similarly the vector 
 \(\begin{bmatrix}
            1\\0
 \end{bmatrix}\)
-denotes that the bit is 0.&lt;/p&gt;
+denotes that the bit is 0, because it has element 1 at index 0.&lt;/p&gt;
 
-&lt;p&gt;For $n=2$, we have a vector of size 4, like the following, which denotes that both bits are 0.&lt;/p&gt;
+&lt;p&gt;For $n=2$, we have a vector of size 4, like the following, which denotes that both bits are 0, because it has element 1 at index 00.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/classic2.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
 
@@ -55,15 +55,21 @@ Also, note that we’re using numpy (&lt;code class=&quot;language-plaintext hig
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Cstate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;
-    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#initialize bits to 0s
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;For example, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;state&lt;/code&gt; for 2 bits initially looks like this,
+    &lt;span class=&quot;c1&quot;&gt;# number of bits
+&lt;/span&gt;    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;# create vector of size 2^n
+&lt;/span&gt;    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# initialize bits to 0s
+&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# by setting index 0 of vector to 1
+&lt;/span&gt;    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;For example, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;state&lt;/code&gt; field for 2 bits initially looks like this,
 denoting the state 00 (just like the 2-bit vector illustrated above)&lt;/p&gt;
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Note that numpy represents vectors as rows instead of our column vectors above—it won’t make a difference for us.&lt;/p&gt;
+&lt;p&gt;Numpy represents vectors as rows instead of column vectors like we do—it won’t make a difference for us.&lt;/p&gt;
 
 &lt;h3 id=&quot;flipping-a-bit&quot;&gt;Flipping a bit&lt;/h3&gt;
 &lt;p&gt;Let’s now apply a NOT (negation) operation to a bit.
@@ -78,7 +84,7 @@ We’re going to represent it as a transformation matrix, as follows:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/notmat.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The way to read the matrix is by looking at columns then rows.
-Note that each column has a single 1  and the rest of the entries are 0s.
+Note that each column has a single 1  and the rest of the entries are 0.
 The position of the 1 denotes the transformation.
 Take the bottom left 1 in the matrix, which is at column 0 and row 1;
 this means that a bit that is 0 is transformed into 1.
@@ -87,7 +93,7 @@ this means that a bit that is 1 is transformed into 0.&lt;/p&gt;
 
 &lt;p&gt;Now to apply this transformation to a state in our representation,
 we simply multiply the NOT matrix above with the state vector.
-For example, we can apply it to the a single bit set to 0:&lt;/p&gt;
+For example, we can apply NOT to a single bit set to 0:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/notmult.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
@@ -104,7 +110,7 @@ a specific one, say the $i$th one?&lt;/p&gt;
 
 &lt;p&gt;We will construct a bigger transformation matrix that only applies
 the NOT to the $i$th bit and leaves the rest untouched.
-To do so, we will “compose” the NOT matrix above with two identity matrices.
+To do so, we will “compose” the NOT matrix with two identity matrices.
 One identity matrix will say that all bits before bit $i$ (bits $0$ to $i-1$) are untouched;
 the other will say that all bits after bit $i$  (bits $i+1$ to $n-1$) are untouched.&lt;/p&gt;
 
@@ -116,13 +122,13 @@ We take the &lt;em&gt;Kronecker product&lt;/em&gt; ($\otimes$) of the identity m
 
 &lt;p&gt;If you haven’t seen Kroenecker product before, don’t be scared;
 it just multiplies  each element of the left matrix with the entire right matrix.
-So in this case, we get a 4x4 matrix as follows:&lt;/p&gt;
+So in this case, we get a $4 \times 4$ matrix as follows:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/not4.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;
-Look at the 2x2 sub-matrix on the top left:
+Look at the $2 \times 2$ sub-matrix on the top left.
 It’s the result of multiplying 1 (the top-left element of $I_2$) with the NOT matrix.&lt;/p&gt;
 
-&lt;p&gt;Consider the element highlighted in yellow. It says if the  bits
+&lt;p&gt;Consider the element highlighted in yellow. It says that if the  bits
 are 01 (column), then turn them into 00 (row). Note that the second bit flips, but not the first bit. The same can be seen with the element highlighted in pink.&lt;/p&gt;
 
 &lt;p&gt;Alright, let’s capture this Kronecker product idea in its general form
@@ -160,7 +166,7 @@ applies it to all  $n$ bits.&lt;/p&gt;
 &lt;p&gt;The method &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; takes a transformation matrix &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt;, e.g., the NOT matrix,
 and applies it to the bit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt;.
 The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NOT&lt;/code&gt; method calls &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; with the NOT matrix.
-Note that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; also applies to operations that apply to more than 1 bit,
+Note that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; also works with operations that apply to more than 1 bit,
 e.g., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AND&lt;/code&gt;, so long as the bits are contiguous.&lt;/p&gt;
 
 &lt;h3 id=&quot;binary-operations&quot;&gt;Binary operations&lt;/h3&gt;
@@ -204,7 +210,7 @@ The result is stored in the first bit.&lt;/p&gt;
 &lt;p&gt;We get&lt;/p&gt;
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;which means that at the end the bits are 11.
+&lt;p&gt;which means that the final state of the 2 bits is 11.
 Since the first bit is 1, this means that 
 the two bits were initially zero.&lt;/p&gt;
 
@@ -217,16 +223,17 @@ E.g.,&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/qubit.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;What this says is that if you &lt;em&gt;measure&lt;/em&gt; the qubit—read its value—you will read 0 with probability 1/2 and 1 with probability 1/2. The probability is the square of $1/\sqrt{2}$, the &lt;em&gt;amplitude&lt;/em&gt;.
+&lt;p&gt;What this says is that if you &lt;em&gt;measure&lt;/em&gt; the qubit—read its value—you will read 0 with probability 1/2 and 1 with probability 1/2. The probability is the sqaure of the absolute value of $1/\sqrt{2}$, the &lt;em&gt;amplitude&lt;/em&gt;.
 Amplitudes can be complex numbers.&lt;/p&gt;
 
 &lt;p&gt;The above vector is usually written with the following notation:
 \(\frac{1}{\sqrt{2}} |0\rangle + \frac{1}{\sqrt{2}} |1\rangle\),
 with amplitudes multiplied by the classical states, 0 and 1, which are wrapped in $|\cdot\rangle$ for historical reasons.&lt;/p&gt;
 
-&lt;p&gt;We can easily represent this state by copy-pasting the class definition
+&lt;p&gt;We can easily represent this quantum state by copy-pasting the class definition
 of classical states and changing the types from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;int&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;complex&lt;/code&gt;.
-Voila! Who said copy-paste is bad?&lt;/p&gt;
+Who said copy-paste is bad?
+Voila! We now a quantum state class &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Qstate&lt;/code&gt;.&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Qstate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -240,7 +247,8 @@ Voila! Who said copy-paste is bad?&lt;/p&gt;
 but the matrices can have complex numbers.
 The matrices are &lt;em&gt;unitary&lt;/em&gt;, which means that they are invertible
 and maintain that the state represents a probability distribution.
-This fact comes from the postulates of quantum mechanics.&lt;/p&gt;
+This fact comes from the postulates of quantum mechanics.
+(but doesn’t really concern us when implementing an interpreter).&lt;/p&gt;
 
 &lt;p&gt;The first transformation we’ll look at is &lt;em&gt;Hadamard&lt;/em&gt;, which applies to a single qubit.&lt;/p&gt;
 
@@ -255,16 +263,26 @@ As a circuit, we write this as follows:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/hadamard2.png&quot; alt=&quot;drawing&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Simiarly, given the state $|1\rangle$, Hadamard
- transforms it into the superposition \(\frac{1}{\sqrt{2}} |0\rangle - \frac{1}{\sqrt{2}} |1\rangle\).
- Note the negative amplitude.
- This is a key property of quantum mechanics that quantum algorithms exploit,
- allowing amplitudes to cancel out (interfere), which we cannot achieve with classical randomized algorithms. We won’t get into it, but I recommend you take a look at &lt;a href=&quot;https://quantum.country/search&quot;&gt;Grover’s algorithm&lt;/a&gt; (which is beautiful).&lt;/p&gt;
+&lt;p&gt;Similarly, given the state $|1\rangle$, Hadamard
+ transforms it into the superposition&lt;/p&gt;
+
+\[\frac{1}{\sqrt{2}} |0\rangle - \frac{1}{\sqrt{2}} |1\rangle\]
+
+&lt;p&gt;or equivalently the vector&lt;/p&gt;
+
+\[\begin{bmatrix}
+          \frac{1}{\sqrt{2}} \\ - \frac{1}{\sqrt{2}}
+\end{bmatrix}\]
+
+&lt;p&gt;Note the negative amplitude of $|1\rangle$.
+This is a key property of quantum mechanics that quantum algorithms exploit,
+allowing amplitudes to cancel out (interfere), which we cannot achieve with classical randomized algorithms. We won’t get into it, but I recommend you take a look at &lt;a href=&quot;https://quantum.country/search&quot;&gt;Grover’s algorithm&lt;/a&gt; (which is beautiful).&lt;/p&gt;
 
 &lt;p&gt;We will implement Hadamard just as we did with NOT.
 I’m using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isq2&lt;/code&gt; as a shorthand for $1/\sqrt{2}$.&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# the only difference is dtype, which is np.complex now
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# this function is the same as in the classical case
+# the only difference is dtype, which is np.complex now
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;#I_{2^i}
 &lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;eyeL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eye&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;complex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -280,10 +298,10 @@ I’m using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i
 &lt;/span&gt;    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matmul&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t_all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hadamard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;h_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isq2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-         &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;    
+    &lt;span class=&quot;n&quot;&gt;h_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isq2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;    
     &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -300,34 +318,75 @@ Pictorially, CNOT is denoted as follows:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/cnotc.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;We will implement CNOT as follows—again, just like 
+&lt;p&gt;Again, we will implement CNOT  just like 
 in the classical setting:&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cnot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cnot_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-         &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-         &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-         &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;complex&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cnot_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cnot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cnot_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+  &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cnot_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Qubit swaps are the same as classical bit swaps.&lt;/p&gt;
 
 &lt;h3 id=&quot;phase-shift-gates&quot;&gt;Phase-shift gates&lt;/h3&gt;
-&lt;p&gt;Finally, we’re missing two single-bit gates
+&lt;p&gt;In the classical setting, AND and NOT suffice to 
+implement any Boolean function.
+In the quantum setting, we’re missing two single-bit gates
 that give us the full power of a quantum computer.
-By full power this means a &lt;em&gt;univerasal set of gates&lt;/em&gt; which which we can simulate any unitary transformation
-to arbitrary degree of accuracy.&lt;/p&gt;
+By full power, I mean a set of gates that can approximate any 
+unitary transformation to an arbitrary degree of accuracy.&lt;/p&gt;
 
-&lt;p&gt;The two missing gates are the $T$ and $S$ gates.&lt;/p&gt;
+&lt;p&gt;The two missing gates are the $S$ and $T$ gates.
+These gates don’t change the probability 
+of measurement, but they change the &lt;em&gt;phase&lt;/em&gt; of the amplitudes.
+This is where complex numbers come in play.&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;TBD&lt;/span&gt;
+&lt;p&gt;We’ll take a look at the $S$ gate: 
+&lt;img src=&quot;http://localhost:4000/assets/s.png&quot; alt=&quot;drawing&quot; width=&quot;200&quot; /&gt;
+Applying $S$ to a state doesn’t change the amplitude of $|0\rangle$,
+but it multiplies the amplitude of $|1\rangle$ by $i$—the imaginary unit. (Remember complex numbers?)
+For example, if we apply $S$ to the superposition state, we get:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/s2.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;
+Check out how the amplitude of $|1\rangle$ 
+changed to $i / \sqrt{2}$.
+If we turn this into a probability, we get the same probability as before:&lt;/p&gt;
+
+\[\left|\frac{1}{\sqrt{2}}\right|^2 = \left|\frac{i}{\sqrt{2}}\right|^2 = 1/2\]
+
+&lt;p&gt;So while the amplitude has changed the probabilities haven’t.&lt;/p&gt;
+
+&lt;p&gt;Here are the $S$ and $T$ gates in code.
+Note that numpy uses $j$ instead of $i$ for the imaginary unit.
+The $T$ gate is similar to the $S$ gate, in that it only changes the amplitude of $|1\rangle$,
+but it changes it in a different way.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# S gate
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;phase_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;    
+  &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phase_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# T gate
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;t_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isq2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isq2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+  &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;epr-pairs&quot;&gt;EPR pairs&lt;/h2&gt;
+&lt;p&gt;At this point, we have a full-blown quantum-circuity simulator.
+You can always add more gates as needed, but we have already implemented a  &lt;em&gt;universal gate set&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;We will end with constructing an &lt;em&gt;EPR pair&lt;/em&gt;, a special entangled stated of two qubits put forth by Einstein, Podolsky and Rosen in 1935 to argue that quantum mechanics is incomplete.&lt;/p&gt;
+&lt;p&gt;We will end with constructing an &lt;em&gt;EPR pair&lt;/em&gt;, a special entangled state of two qubits proposed by Einstein, Podolsky and Rosen in 1935 to argue that quantum mechanics is incomplete.&lt;/p&gt;
 
 &lt;p&gt;Here’s how the circuit looks. Apply a Hadamard to the first qubit,
 putting it in superposition, then apply a CNOT to both qubits.
@@ -341,14 +400,14 @@ putting it in superposition, then apply a CNOT to both qubits.
 &lt;img src=&quot;http://localhost:4000/assets/epr2.png&quot; alt=&quot;drawing&quot; width=&quot;200&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The beauty of this state is that the two qubits are entangled.
-This means if we measure the first bit, we will get 0 or 1 
+This means that if we measure the first bit, we will get 0 or 1 
 with equal probability.
 But then the other qubit will also &lt;em&gt;collapse&lt;/em&gt; to the same
 answer that we get.
 So if each of us has one of the two entangled bits,
 it appears that we can achieve instantaneous communication!
 This didn’t sit well with Einstein and his friends;
-indeed, they’re construction of EPR pairs was to show a paradox.
+indeed, their construction of EPR pairs was to show a paradox.
 EPR pairs are key ingredients in &lt;a href=&quot;https://quantum.country/teleportation&quot;&gt;quantum teleportation&lt;/a&gt;, which I encourage you to read about.&lt;/p&gt;
 
 &lt;p&gt;Here’s how we construct an EPR pair with our interpreter.&lt;/p&gt;
@@ -366,8 +425,24 @@ which I’ve simplified for legibility.
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.70710678&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;   &lt;span class=&quot;mf&quot;&gt;0.70710678&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
+
+&lt;p&gt;That’s it folks. We’ve implemented a quantum circuit simulator.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Our simulator will get exponentially slower with more qubits.
+This is expected. Researchers have come up with lots of techniques
+to make quantum simulations faster on classical computers,
+e.g., using BDDs and parallelism.&lt;/li&gt;
+  &lt;li&gt;Our simulator doesn’t implement measurement,
+because it represents the entire probability distribution explicitly.&lt;/li&gt;
+  &lt;li&gt;As an introduction to quantum computing, I recommend Matuschak and Nielsen’s &lt;a href=&quot;https://quantum.country/&quot;&gt;Quantum Country&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;Our binary gates apply to contiguous (qu)bits.
+This makes them the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; function simpler to write. We can generalize the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; function to apply binary gates to any pair of (qu)bits, but it gets a bit uglier. Since we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;swap&lt;/code&gt;, we can always move qubits next to each other.&lt;/li&gt;
+&lt;/ol&gt;
+
 &lt;h2 id=&quot;the-entire-quantum-circuit-simulator&quot;&gt;The Entire Quantum Circuit Simulator&lt;/h2&gt;
-&lt;p&gt;Here’s the entire 27 lines of code.&lt;/p&gt;
+&lt;p&gt;Here are all 27 lines of code.&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
 
@@ -379,7 +454,8 @@ which I’ve simplified for legibility.
     &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;complex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
 
-  &lt;span class=&quot;c1&quot;&gt;# the only difference is dtype, which is np.complex now
+  &lt;span class=&quot;c1&quot;&gt;# apply transformation t to bit i 
+&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# (or i and i+1 in case of binary gates)
 &lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;#I_{2^i}
 &lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;eyeL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eye&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;complex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -391,7 +467,7 @@ which I’ve simplified for legibility.
     &lt;span class=&quot;c1&quot;&gt;# eyeL ⊗ t ⊗ eyeR
 &lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;t_all&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kron&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kron&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eyeL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eyeR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-    &lt;span class=&quot;c1&quot;&gt;# apply transformation to state
+    &lt;span class=&quot;c1&quot;&gt;# apply transformation to state (multiplication)
 &lt;/span&gt;    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matmul&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t_all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
   &lt;span class=&quot;c1&quot;&gt;# Hadamard gate
@@ -415,7 +491,7 @@ which I’ve simplified for legibility.
     &lt;span class=&quot;n&quot;&gt;phase_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;complex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;    
+    &lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;    
     &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phase_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
   &lt;span class=&quot;c1&quot;&gt;# CNOT gate
@@ -439,14 +515,6 @@ which I’ve simplified for legibility.
     &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;swap_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;Our simulator doesn’t implement measurement,
-because it represents the entire probability distribution explicitly.&lt;/li&gt;
-  &lt;li&gt;As an introduction to quantum computing, I recomment Matuschak and Nielsen’s &lt;a href=&quot;https://quantum.country/&quot;&gt;Quantum Country&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;Our binary gates apply to contiguous (qu)bits.
-This makes them the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; function simpler to write. We can generalize the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; function to apply binary gates to any pair of (qu)bits, but it gets a bit uglier. Since we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;swap&lt;/code&gt;, we can always move qubits next to each other.&lt;/li&gt;
-&lt;/ol&gt;
 </content>
  </entry>
  
