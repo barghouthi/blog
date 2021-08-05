@@ -14,11 +14,11 @@ $blue: #268bd2;
 // $blue: #6a9fb5;
 $brown: #8f5536;
 
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic,500italic);
 
 $root-font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
 $root-font-size: 15px;
-$root-line-height: 26px;
+$root-line-height: 29px;
 
 $body-color: rgba(0,0,0,.85);
 $body-bg: #fff;
@@ -27,7 +27,7 @@ $link-color: #d42424;
 $border-color: #e5e5e5;
 
 $large-breakpoint: 38em;
-$large-font-size: 15px;
+$large-font-size: 16px;
 
 $code-font-family: Menlo, Monaco, "Courier New", monospace;
 $code-color: #242729;
