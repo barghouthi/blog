@@ -4,7 +4,7 @@
  <title></title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2021-08-05T16:29:31-05:00</updated>
+ <updated>2021-08-05T19:19:30-05:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Aws Albarghouthi</name>
@@ -31,13 +31,15 @@ or as a &lt;a href=&quot;https://colab.research.google.com/drive/1sP64Lt0OFpXZOe
 good old &lt;em&gt;not&lt;/em&gt;, &lt;em&gt;and&lt;/em&gt;, &lt;em&gt;or&lt;/em&gt;. Then, we will generalize our interpreter to quantum circuits. A classical circuit in our setting applies logical operations to $n$ bits.&lt;/p&gt;
 
 &lt;h3 id=&quot;classical-state&quot;&gt;Classical state&lt;/h3&gt;
-&lt;p&gt;Let’s begin by representing the state of $n$ bits. We’ll do this in an unusual way. We will define a vector of size $2^n$ where each index of the vector represents one possible configuration of the $n$ bits. 
-For $n=1$ we have a vector of size 2, e.g.:&lt;/p&gt;
+&lt;p&gt;Let’s begin by representing the state of $n$ bits. We’ll do this in an unusual way. We will define a Boolean vector (i.e., 0s and 1s) of size $2^n$ where each index of the vector represents one possible configuration of the $n$ bits.
+There will be a single non-zero (1) element in the vector indicating the configuration.&lt;/p&gt;
+
+&lt;p&gt;For $n=1$, we have a vector of size 2, e.g.:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/classic1.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The vector is in black; the numbers in pink (left) are the indices. The vector above therefore represents a  bit that is 1, since it has element 1 at index 1.
-Similarly the vector 
+Similarly, the vector 
 \(\begin{bmatrix}
            1\\0
 \end{bmatrix}\)
@@ -101,6 +103,8 @@ For example, we can apply NOT to a single bit set to 0:&lt;/p&gt;
 \(\begin{bmatrix}
            0\\1
 \end{bmatrix}\), denoting a bit set to 1.&lt;/p&gt;
+
+&lt;p&gt;Intuitively, multiplication by a transformation matrix simply moves around the 1 in the input state vector to some other position in the output state vector.&lt;/p&gt;
 
 &lt;h3 id=&quot;handling-multiple-bits&quot;&gt;Handling multiple bits&lt;/h3&gt;
 &lt;p&gt;But what happens when we have $n$ bits and we only want to negate
@@ -200,8 +204,10 @@ in the first of the two bits.
 with a simple circuit that checks if two bits are both zero.
 The result is stored in the first bit.&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Cstate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# initialize state
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NOT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# negate first bit
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# initialize state
+# Recall that Cstate initializes all bits to 0
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Cstate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NOT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# negate first bit
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NOT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# negate second bit
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AND&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# AND first and second bits
 &lt;/span&gt;
@@ -213,6 +219,8 @@ The result is stored in the first bit.&lt;/p&gt;
 &lt;p&gt;which means that the final state of the 2 bits is 11.
 Since the first bit is 1, this means that 
 the two bits were initially zero.&lt;/p&gt;
+
+&lt;p&gt;In summary, with AND, OR, and NOT we can write an arbitrary boolean function from $n$ bits to $n$-bits—represented as a $2^n$ vector with a single 1— as a sequence of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cstate&lt;/code&gt; operations. Each one of these &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cstate&lt;/code&gt; operations is implemented using matrix multiplication.&lt;/p&gt;
 
 &lt;h2 id=&quot;quantum-circuits&quot;&gt;Quantum circuits&lt;/h2&gt;
 &lt;p&gt;We now generalize the above to quantum circuits.
@@ -244,11 +252,13 @@ Voila! We now a quantum state class &lt;code class=&quot;language-plaintext high
 
 &lt;h3 id=&quot;hadamard-gate&quot;&gt;Hadamard gate&lt;/h3&gt;
 &lt;p&gt;Transformations of quantum states are also matrices,
-but the matrices can have complex numbers.
+but they can have complex numbers.
 The matrices are &lt;em&gt;unitary&lt;/em&gt;, which means that they are invertible
 and maintain that the state represents a probability distribution.
-This fact comes from the postulates of quantum mechanics.
-(but doesn’t really concern us when implementing an interpreter).&lt;/p&gt;
+This fact comes from the postulates of quantum mechanics, but doesn’t really concern us when implementing an interpreter.
+It’s interesting to note though that AND and OR are not unitary,
+because they’re not reversibel,
+and therefore are not quantum operations.&lt;/p&gt;
 
 &lt;p&gt;The first transformation we’ll look at is &lt;em&gt;Hadamard&lt;/em&gt;, which applies to a single qubit.&lt;/p&gt;
 
@@ -306,11 +316,12 @@ I’m using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;controlled-not-gate&quot;&gt;Controlled NOT gate&lt;/h3&gt;
-&lt;p&gt;Next, we’ll look at the CNOT gate, which is a binary gate.&lt;/p&gt;
+&lt;p&gt;Next, we’ll look at the CNOT (controlled NOT) gate, which is a binary gate.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/cnot.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Classically speaking, this takes the XOR of two bits and stores the result
+&lt;p&gt;Classically speaking, 
+this takes the XOR of two bits and stores the result
 in the second bit.
 But, as we shall see, it is fundamental in quantum computing,
 as it allows us to &lt;em&gt;entangle&lt;/em&gt; two qubits (more on this in a bit).
@@ -367,11 +378,11 @@ but it changes it in a different way.&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# S gate
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;phase_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;s_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
       &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
       &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;    
-  &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phase_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;# T gate
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -436,10 +447,12 @@ to make quantum simulations faster on classical computers,
 e.g., using BDDs and parallelism.&lt;/li&gt;
   &lt;li&gt;Our simulator doesn’t implement measurement,
 because it represents the entire probability distribution explicitly.&lt;/li&gt;
-  &lt;li&gt;As an introduction to quantum computing, I recommend Matuschak and Nielsen’s &lt;a href=&quot;https://quantum.country/&quot;&gt;Quantum Country&lt;/a&gt;.&lt;/li&gt;
   &lt;li&gt;Our binary gates apply to contiguous (qu)bits.
-This makes them the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; function simpler to write. We can generalize the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; function to apply binary gates to any pair of (qu)bits, but it gets a bit uglier. Since we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;swap&lt;/code&gt;, we can always move qubits next to each other.&lt;/li&gt;
+This makes the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; function simpler to write. We can generalize the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;op&lt;/code&gt; function to apply binary gates to any pair of (qu)bits, but it gets  uglier. Since we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;swap&lt;/code&gt;, we can always move qubits next to each other.&lt;/li&gt;
+  &lt;li&gt;As an introduction to quantum computing, I recommend Matuschak and Nielsen’s &lt;a href=&quot;https://quantum.country/&quot;&gt;Quantum Country&lt;/a&gt;.&lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;p&gt;&lt;em&gt;Thanks to John Cyphert for his insightful comments.&lt;/em&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;the-entire-quantum-circuit-simulator&quot;&gt;The Entire Quantum Circuit Simulator&lt;/h2&gt;
 &lt;p&gt;Here are all 27 lines of code.&lt;/p&gt;
@@ -488,11 +501,11 @@ This makes them the &lt;code class=&quot;language-plaintext highlighter-rouge&qu
 
   &lt;span class=&quot;c1&quot;&gt;# S gate
 &lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;phase_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;s_matrix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;    
-    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;phase_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;op&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s_matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
   &lt;span class=&quot;c1&quot;&gt;# CNOT gate
 &lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cnot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
