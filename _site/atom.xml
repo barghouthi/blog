@@ -4,7 +4,7 @@
  <title></title>
  <link href="http://localhost:4000/atom.xml" rel="self"/>
  <link href="http://localhost:4000/"/>
- <updated>2021-08-05T19:19:30-05:00</updated>
+ <updated>2021-08-05T19:30:55-05:00</updated>
  <id>http://localhost:4000</id>
  <author>
    <name>Aws Albarghouthi</name>
@@ -241,13 +241,13 @@ with amplitudes multiplied by the classical states, 0 and 1, which are wrapped i
 &lt;p&gt;We can easily represent this quantum state by copy-pasting the class definition
 of classical states and changing the types from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;int&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;complex&lt;/code&gt;.
 Who said copy-paste is bad?
-Voila! We now a quantum state class &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Qstate&lt;/code&gt;.&lt;/p&gt;
+Voila! We now have a quantum state class &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Qstate&lt;/code&gt;.&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Qstate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;
     &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dtype&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;complex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#initialize bits to 0s
+    &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#initialize qubits to 0s
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;hadamard-gate&quot;&gt;Hadamard gate&lt;/h3&gt;
@@ -257,7 +257,7 @@ The matrices are &lt;em&gt;unitary&lt;/em&gt;, which means that they are inverti
 and maintain that the state represents a probability distribution.
 This fact comes from the postulates of quantum mechanics, but doesn’t really concern us when implementing an interpreter.
 It’s interesting to note though that AND and OR are not unitary,
-because they’re not reversibel,
+because they’re not reversible,
 and therefore are not quantum operations.&lt;/p&gt;
 
 &lt;p&gt;The first transformation we’ll look at is &lt;em&gt;Hadamard&lt;/em&gt;, which applies to a single qubit.&lt;/p&gt;
@@ -286,7 +286,7 @@ As a circuit, we write this as follows:&lt;/p&gt;
 
 &lt;p&gt;Note the negative amplitude of $|1\rangle$.
 This is a key property of quantum mechanics that quantum algorithms exploit,
-allowing amplitudes to cancel out (interfere), which we cannot achieve with classical randomized algorithms. We won’t get into it, but I recommend you take a look at &lt;a href=&quot;https://quantum.country/search&quot;&gt;Grover’s algorithm&lt;/a&gt; (which is beautiful).&lt;/p&gt;
+allowing amplitudes to cancel out (interfere), which we cannot achieve with classical randomized algorithms. We won’t get into it, but I recommend taking   a look at &lt;a href=&quot;https://quantum.country/search&quot;&gt;Grover’s algorithm&lt;/a&gt; (which is beautiful).&lt;/p&gt;
 
 &lt;p&gt;We will implement Hadamard just as we did with NOT.
 I’m using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;isq2&lt;/code&gt; as a shorthand for $1/\sqrt{2}$.&lt;/p&gt;
@@ -365,7 +365,7 @@ For example, if we apply $S$ to the superposition state, we get:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/s2.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;
 Check out how the amplitude of $|1\rangle$ 
 changed to $i / \sqrt{2}$.
-If we turn this into a probability, we get the same probability as before:&lt;/p&gt;
+If we turn the amplitude into a probability, we get the same probability as before:&lt;/p&gt;
 
 \[\left|\frac{1}{\sqrt{2}}\right|^2 = \left|\frac{i}{\sqrt{2}}\right|^2 = 1/2\]
 
@@ -394,7 +394,7 @@ but it changes it in a different way.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;epr-pairs&quot;&gt;EPR pairs&lt;/h2&gt;
-&lt;p&gt;At this point, we have a full-blown quantum-circuity simulator.
+&lt;p&gt;At this point, we have a full-blown quantum-circuit simulator.
 You can always add more gates as needed, but we have already implemented a  &lt;em&gt;universal gate set&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;We will end with constructing an &lt;em&gt;EPR pair&lt;/em&gt;, a special entangled state of two qubits proposed by Einstein, Podolsky and Rosen in 1935 to argue that quantum mechanics is incomplete.&lt;/p&gt;
@@ -417,8 +417,8 @@ But then the other qubit will also &lt;em&gt;collapse&lt;/em&gt; to the same
 answer that we get.
 So if each of us has one of the two entangled bits,
 it appears that we can achieve instantaneous communication!
-This didn’t sit well with Einstein and his friends;
-indeed, their construction of EPR pairs was to show a paradox.
+This didn’t sit well with Einstein and his friends.
+Indeed, their construction of EPR pairs was to demonstrate a paradox.
 EPR pairs are key ingredients in &lt;a href=&quot;https://quantum.country/teleportation&quot;&gt;quantum teleportation&lt;/a&gt;, which I encourage you to read about.&lt;/p&gt;
 
 &lt;p&gt;Here’s how we construct an EPR pair with our interpreter.&lt;/p&gt;
@@ -442,7 +442,7 @@ which I’ve simplified for legibility.
 
 &lt;ol&gt;
   &lt;li&gt;Our simulator will get exponentially slower with more qubits.
-This is expected. Researchers have come up with lots of techniques
+This is sadly unavoidable. Nonetheless, researchers have come up with lots of techniques
 to make quantum simulations faster on classical computers,
 e.g., using BDDs and parallelism.&lt;/li&gt;
   &lt;li&gt;Our simulator doesn’t implement measurement,
