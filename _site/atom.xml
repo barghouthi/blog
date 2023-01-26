@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title></title>
- <link href="http://localhost:4000/atom.xml" rel="self"/>
- <link href="http://localhost:4000/"/>
- <updated>2021-08-06T10:03:31-05:00</updated>
- <id>http://localhost:4000</id>
+ <link href="https://barghouthi.github.io/atom.xml" rel="self"/>
+ <link href="https://barghouthi.github.io/"/>
+ <updated>2023-01-25T18:35:45-06:00</updated>
+ <id>https://barghouthi.github.io</id>
  <author>
    <name>Aws Albarghouthi</name>
    <email>albargah@gmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>A Quantum Circuit Simulator in 27 Lines of Python</title>
-   <link href="http://localhost:4000/2021/08/05/quantum/"/>
+   <link href="https://barghouthi.github.io/2021/08/05/quantum/"/>
    <updated>2021-08-05T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2021/08/05/quantum</id>
+   <id>https://barghouthi.github.io/2021/08/05/quantum</id>
    <content type="html">&lt;p&gt;We’re going to write a quantum circuit interpreter (or &lt;em&gt;simulator&lt;/em&gt;) using just 27 lines of Python!&lt;/p&gt;
 
 &lt;p&gt;To understand this post, you don’t need to know anything about quantum computing. All you need to know is matrix multiplication! I’ll walk you through the rest! We’re going to treat the operations of a quantum computer as yet another programming language for which we want to build an interpreter. So we won’t get too much into quantum mechanics or fancy quantum algorithms.&lt;/p&gt;
@@ -36,7 +36,7 @@ There will be a &lt;em&gt;single non-zero (1) element&lt;/em&gt; in the vector i
 
 &lt;p&gt;For $n=1$, we have a vector of size 2, e.g.:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/classic1.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/classic1.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The vector is in black; the numbers in pink (left) are the indices denoting the state of the bit. The vector above, therefore, represents a  bit that is set to 1, since it has element 1 at index 1.
 Similarly, the vector 
@@ -47,7 +47,7 @@ denotes a bit set to 0, because it has element 1 at index 0.&lt;/p&gt;
 
 &lt;p&gt;For $n=2$, we have a vector of size 4, like the following, which denotes that both bits are 0, because it has element 1 at index 00.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/classic2.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/classic2.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You get the idea. It’s a terribly inefficient representation, but I chose it on purpose because we’ll later generalize it to &lt;em&gt;qubits&lt;/em&gt;, and quantum simulation is inherently &lt;a href=&quot;https://en.wikipedia.org/wiki/BQP&quot;&gt;inefficient&lt;/a&gt; as far as we can tell.&lt;/p&gt;
 
@@ -78,12 +78,12 @@ denoting the state 00 (just like the 2-bit vector illustrated above)&lt;/p&gt;
 In a circuit of 1 bit, this looks as follows
 (where the pink stuff is an example input/output of the circuit):&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/not1.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/not1.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;NOT is a transformation that takes a bit from one state to another.
 We’re going to represent it as a transformation matrix:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/notmat.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/notmat.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The way to read the matrix is by looking at columns then rows.
 Note that each column has a single 1  and the rest of the entries are 0.
@@ -97,7 +97,7 @@ this means that a bit that is 1 is transformed into 0.&lt;/p&gt;
 we simply multiply the NOT matrix above with the state vector.
 For example, we can apply NOT to a single bit set to 0:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/notmult.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/notmult.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The above multiplication results in 
 \(\begin{bmatrix}
@@ -110,7 +110,7 @@ For example, we can apply NOT to a single bit set to 0:&lt;/p&gt;
 &lt;p&gt;But what happens when we have $n$ bits and we only want to negate
 a specific one, say the $i$th one?&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/noti.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/noti.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We will construct a bigger transformation matrix that only applies
 the NOT to the $i$th bit and leaves the rest untouched.
@@ -122,13 +122,13 @@ the other will say that all bits after bit $i$  (bits $i+1$ to $n-1$) are untouc
 where we want to negate the second bit.
 We take the &lt;em&gt;Kronecker product&lt;/em&gt; ($\otimes$) of the identity matrix (of size 2, denoted $I_2$) with the NOT transformation.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/not2.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/not2.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you haven’t seen Kroenecker product before, don’t be scared;
 it just multiplies  each element of the left matrix with the entire right matrix.
 So in this case, we get a $4 \times 4$ matrix as follows:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/not4.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/not4.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;
 Look at the $2 \times 2$ sub-matrix on the top left.
 It’s the result of multiplying 1 (the top-left element of $I_2$) with the NOT matrix.&lt;/p&gt;
 
@@ -139,7 +139,7 @@ are 01 (column), then turn them into 00 (row). Observe that the second bit flips
 and implement it.
  $I_m$ is an indentity matrix that of size $m \times m$.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/notg.png&quot; alt=&quot;drawing&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/notg.png&quot; alt=&quot;drawing&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We will implement this as a method of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cstate&lt;/code&gt; class
 that takes an arbitrary transformation  matrix &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt; over contiguous bits and 
@@ -182,7 +182,7 @@ e.g., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AND&lt;
 &lt;p&gt;Let’s now look at some binary operations.
 The following transformation swaps two bits.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/swap.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/swap.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can implement it as follows.
 Note that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;swap(i)&lt;/code&gt; swaps bits &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i+1&lt;/code&gt;.&lt;/p&gt;
@@ -198,18 +198,18 @@ Note that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;swa
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;As a circuit, a swap is shown like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/swapc.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/swapc.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can similarly implement AND and OR, where the result is stored
 in the first of the two bits.
-&lt;img src=&quot;http://localhost:4000/assets/andor.png&quot; alt=&quot;drawing&quot; width=&quot;600&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://barghouthi.github.io/assets/andor.png&quot; alt=&quot;drawing&quot; width=&quot;600&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;simple-example&quot;&gt;Simple example&lt;/h3&gt;
 &lt;p&gt;Finally, we end our discussion of classical circuits
 with a simple circuit that checks if two bits are both zero.
 The result is stored in the first bit.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/cex.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/cex.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# initialize state
 # Recall that Cstate initializes all bits to 0
@@ -238,7 +238,7 @@ A qubit can be 0, 1, or a superposition of 0 and 1.
 So if you write out its vector, it can have numbers in different indices.
 E.g.,&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/qubit.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/qubit.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;What this says is that if you &lt;em&gt;measure&lt;/em&gt; the qubit—read its value—you will read 0 with probability 1/2 and 1 with probability 1/2. The probability is the sqaure of the absolute value of $1/\sqrt{2}$, the &lt;em&gt;amplitude&lt;/em&gt;.
 Amplitudes can be complex numbers.
@@ -275,7 +275,7 @@ and therefore are not quantum operations.&lt;/p&gt;
 
 &lt;p&gt;The first transformation we’ll look at is &lt;em&gt;Hadamard&lt;/em&gt;, which applies to a single qubit.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/hadamard.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/hadamard.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;A Hadamard gate puts a state in superposition.
 For example, given the classical state $\vert0\rangle$, i.e., the vector \(\begin{bmatrix}
@@ -287,7 +287,7 @@ it transforms it into the superposition we saw above,&lt;/p&gt;
 
 &lt;p&gt;As a circuit, we write this as follows:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/hadamard2.png&quot; alt=&quot;drawing&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/hadamard2.png&quot; alt=&quot;drawing&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Similarly, given the state $\vert1\rangle$, Hadamard
  transforms it into the superposition&lt;/p&gt;
@@ -334,7 +334,7 @@ I’m using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i
 &lt;h3 id=&quot;controlled-not-gate&quot;&gt;Controlled NOT gate&lt;/h3&gt;
 &lt;p&gt;Next, we’ll look at the CNOT (controlled NOT) gate, which is a binary gate.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/cnot.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/cnot.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Classically speaking, 
 this takes the XOR of two bits and stores the result
@@ -343,7 +343,7 @@ But, as we shall see, it is fundamental in quantum computing,
 as it allows us to &lt;em&gt;entangle&lt;/em&gt; two qubits (more on this in a bit).
 Pictorially, CNOT is denoted as follows:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/cnotc.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/cnotc.png&quot; alt=&quot;drawing&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Again, we will implement CNOT  just like 
 in the classical setting:&lt;/p&gt;
@@ -373,12 +373,12 @@ of measurement, but they change the &lt;em&gt;phase&lt;/em&gt; of the amplitudes
 This is where complex numbers come into play.&lt;/p&gt;
 
 &lt;p&gt;We’ll take a look at the $S$ gate: 
-&lt;img src=&quot;http://localhost:4000/assets/s.png&quot; alt=&quot;drawing&quot; width=&quot;200&quot; /&gt;
+&lt;img src=&quot;https://barghouthi.github.io/assets/s.png&quot; alt=&quot;drawing&quot; width=&quot;200&quot; /&gt;
 Applying $S$ to a state doesn’t change the amplitude of $\vert0\rangle$,
 but it multiplies the amplitude of $\vert1\rangle$ by $i$—the imaginary unit. (Remember complex numbers?)
 For example, if we apply $S$ to the superposition state, we get:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/s2.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/s2.png&quot; alt=&quot;drawing&quot; width=&quot;400&quot; /&gt;
 Check out how the amplitude of $\vert1\rangle$ 
 changed to $i / \sqrt{2}$.
 If we turn the amplitude of $\vert 1 \rangle$ into a probability, we get the same probability as before:&lt;/p&gt;
@@ -417,14 +417,14 @@ You can always add more gates as needed, but we have already implemented a  &lt;
 
 &lt;p&gt;Here’s how the circuit looks. Apply a Hadamard to the first qubit,
 putting it in superposition, then apply a CNOT to both qubits.
-&lt;img src=&quot;http://localhost:4000/assets/epr.png&quot; alt=&quot;drawing&quot; width=&quot;600&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://barghouthi.github.io/assets/epr.png&quot; alt=&quot;drawing&quot; width=&quot;600&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This results in the following state, which is called an EPR pair or a &lt;em&gt;Bell state&lt;/em&gt;:&lt;/p&gt;
 
 \[\frac{1}{\sqrt{2}} \vert00\rangle + \frac{1}{\sqrt{2}} \vert11\rangle\]
 
 &lt;p&gt;In vector notation, an EPR pair is
-&lt;img src=&quot;http://localhost:4000/assets/epr2.png&quot; alt=&quot;drawing&quot; width=&quot;200&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://barghouthi.github.io/assets/epr2.png&quot; alt=&quot;drawing&quot; width=&quot;200&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The beauty of this state is that the two qubits are entangled.
 This means that if we measure the first bit, we will get 0 or 1 
@@ -551,9 +551,9 @@ This makes the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&g
  
  <entry>
    <title>Teaching Your SMT Solver Probability Theory</title>
-   <link href="http://localhost:4000/2019/07/15/smt-probability/"/>
+   <link href="https://barghouthi.github.io/2019/07/15/smt-probability/"/>
    <updated>2019-07-15T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2019/07/15/smt-probability</id>
+   <id>https://barghouthi.github.io/2019/07/15/smt-probability</id>
    <content type="html">&lt;p&gt;The unexpected rise of SAT and SMT solvers has revolutionized software verification, both the automated and deductive flavors.
 Simply, you encode program semantics as logical circuits and ask the SMT solver questions about them. How elegant.
 But what happens when your program is randomized? Good luck! The first-order world of SMT solvers does not have the ingredients to sustain your stochastic existence. Go find another home.&lt;/p&gt;
@@ -593,7 +593,7 @@ Take this program:&lt;/p&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Say we want to prove the following (probabilistic) Hoare triple:&lt;sup id=&quot;fnref:union-bound&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:union-bound&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Say we want to prove the following (probabilistic) Hoare triple:&lt;sup id=&quot;fnref:union-bound&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:union-bound&quot; class=&quot;footnote&quot; rel=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 
 \[\vdash_{\color{red}{1/3}} \{x &amp;gt; 0\}  ~f(x)~ \{y \geq x\}\]
 
@@ -601,7 +601,7 @@ Take this program:&lt;/p&gt;
 
 &lt;p&gt;This Hoare triple is intuitively valid: values of $y$ are uniformly distributed between $0$ and $3x$, so getting a value of $y \geq x$ has a failure probability of $1/3$.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/probability1.png&quot; alt=&quot;Probability density function&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/probability1.png&quot; alt=&quot;Probability density function&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Cool. But we want to automatically establish this Hoare triple with an SMT solver.
 How? We’ll get rid of probability. Adios!&lt;/p&gt;
@@ -652,7 +652,7 @@ Check out this parameterized version of &lt;code class=&quot;language-plaintext 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?2&lt;/code&gt; are two unknown expressions that we want to synthesize; they define the assumption we are making.
 Depending on what we choose, we will &lt;em&gt;incur&lt;/em&gt; a different probability of failure &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;w&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/probability2.png&quot; alt=&quot;Probability density function of axiom family&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://barghouthi.github.io/assets/probability2.png&quot; alt=&quot;Probability density function of axiom family&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;So now you can use your favorite program synthesis engine to synthesize values for the unknowns such that the postcondition \(y \geq x\) is true and
 and the failure probability $w \leq 1/3$. 
@@ -715,9 +715,9 @@ It’s really fascinating how far we can take SMT solvers.&lt;/p&gt;
  
  <entry>
    <title>Differentiable Programming: A Semantics Perspective</title>
-   <link href="http://localhost:4000/2018/05/01/differentiable-programming/"/>
+   <link href="https://barghouthi.github.io/2018/05/01/differentiable-programming/"/>
    <updated>2018-05-01T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2018/05/01/differentiable-programming</id>
+   <id>https://barghouthi.github.io/2018/05/01/differentiable-programming</id>
    <content type="html">&lt;p&gt;So deep learning has taken the world by storm.
 Frameworks for training deep neural networks, like &lt;a href=&quot;https://www.tensorflow.org/&quot;&gt;TensorFlow&lt;/a&gt;, allow you to construct so-called &lt;em&gt;differentiable programs&lt;/em&gt;.
 The idea is that one can compute the derivative of some program (usually some neural net), and then use that to optimize its parameters.&lt;/p&gt;
@@ -756,7 +756,7 @@ y &amp;amp;\gets v_1 + v_2
 \end{align*}\]
 
 &lt;p&gt;If you plot this function, you get the following spooky graph:
-&lt;img src=&quot;http://localhost:4000/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://barghouthi.github.io/assets/graph.png&quot; alt=&quot;Graph of running example&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;If you remember your calculus, the partial derivative of a function $\frac{\partial f}{\partial x}$ is essentially the rate of change of the output $y$ as $x$ changes.
 For our function $f$,&lt;/p&gt;
@@ -860,9 +860,9 @@ y &amp;amp;\gets v_1 + v_2\\
  
  <entry>
    <title>Fairification: Making Unfair Programs Fair</title>
-   <link href="http://localhost:4000/2017/05/01/debiasing/"/>
+   <link href="https://barghouthi.github.io/2017/05/01/debiasing/"/>
    <updated>2017-05-01T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2017/05/01/debiasing</id>
+   <id>https://barghouthi.github.io/2017/05/01/debiasing</id>
    <content type="html">&lt;p&gt;Over the past year, we have been exploring the notion of &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/fatml16.pdf&quot;&gt;&lt;em&gt;algorithmic fairness&lt;/em&gt; from a PL/verification perspective&lt;/a&gt;.
 Today I’m going to talk about a new paper we have that is appearing at CAV 2017: &lt;a href=&quot;http://pages.cs.wisc.edu/~aws/papers/cav17.pdf&quot;&gt;&lt;em&gt;Repairing Decision-making Programs under Uncertainty&lt;/em&gt;&lt;/a&gt;, with Samuel Drews and Loris D’Antoni.&lt;/p&gt;
 
@@ -1041,9 +1041,9 @@ about fairness in data analysis environments?&lt;/em&gt;&lt;/p&gt;
  
  <entry>
    <title>A Program Synthesis Primer</title>
-   <link href="http://localhost:4000/2017/04/24/synthesis-primer/"/>
+   <link href="https://barghouthi.github.io/2017/04/24/synthesis-primer/"/>
    <updated>2017-04-24T00:00:00-05:00</updated>
-   <id>http://localhost:4000/2017/04/24/synthesis-primer</id>
+   <id>https://barghouthi.github.io/2017/04/24/synthesis-primer</id>
    <content type="html">&lt;p&gt;My colleague Somesh Jha recently asked me to give a lecture on &lt;em&gt;program synthesis&lt;/em&gt; to his class.
 As I prepared my notes, I realized that a single lecture is long enough to formally define the problem and code up some cool examples
 that demonstrate the process.
@@ -1079,7 +1079,7 @@ Think of this as the naive solution of a problem
 that you’re sure works correctly, but that you won’t put into production, perhaps because it’s pretty inefficient.
 Your goal is to find a program &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p_smart&lt;/code&gt;
 that is equivalent to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p_naive&lt;/code&gt;,
-but that is more efficient and hard to get right.&lt;sup id=&quot;fnref:fn-compiler&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:fn-compiler&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+but that is more efficient and hard to get right.&lt;sup id=&quot;fnref:fn-compiler&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:fn-compiler&quot; class=&quot;footnote&quot; rel=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 
 &lt;p&gt;For illustration, let’s look at an extremely simple example.
 The naive program is the following,
@@ -1181,9 +1181,9 @@ as 8-bitvectors.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;The code for this example is available
 on &lt;a href=&quot;http://github.com/barghouthi/704examples/blob/master/synthesis/synth.py&quot;&gt;GitHub&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BitVec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'x'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BitVec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'y'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BitVec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'h'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BitVec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;x&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BitVec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;y&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BitVec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;h&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Next, we encode $ \varphi_n $ and $ \varphi_s $:&lt;/p&gt;
@@ -1220,7 +1220,7 @@ You could think of this as test-driven development on steroids!&lt;/p&gt;
 
 &lt;p&gt;Say we want to write a function that, given
 bitvector &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;, returns a bitvector &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;y&lt;/code&gt; that is 1  in the
-position of the first 0 from the right occuring in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;, and 0 everywhere else.&lt;sup id=&quot;fnref:fn-sketch&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:fn-sketch&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+position of the first 0 from the right occuring in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;, and 0 everywhere else.&lt;sup id=&quot;fnref:fn-sketch&quot; role=&quot;doc-noteref&quot;&gt;&lt;a href=&quot;#fn:fn-sketch&quot; class=&quot;footnote&quot; rel=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 
 &lt;p&gt;For example,&lt;/p&gt;
 

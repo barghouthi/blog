@@ -5,12 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+   <script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
 </script>
 
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-</script>
 
   <title>
     
@@ -77,7 +85,7 @@ Think of this as the naive solution of a problem
 that you’re sure works correctly, but that you won’t put into production, perhaps because it’s pretty inefficient.
 Your goal is to find a program <code class="language-plaintext highlighter-rouge">p_smart</code>
 that is equivalent to <code class="language-plaintext highlighter-rouge">p_naive</code>,
-but that is more efficient and hard to get right.<sup id="fnref:fn-compiler" role="doc-noteref"><a href="#fn:fn-compiler" class="footnote">1</a></sup></p>
+but that is more efficient and hard to get right.<sup id="fnref:fn-compiler" role="doc-noteref"><a href="#fn:fn-compiler" class="footnote" rel="footnote">1</a></sup></p>
 
 <p>For illustration, let’s look at an extremely simple example.
 The naive program is the following,
@@ -218,7 +226,7 @@ You could think of this as test-driven development on steroids!</p>
 
 <p>Say we want to write a function that, given
 bitvector <code class="language-plaintext highlighter-rouge">x</code>, returns a bitvector <code class="language-plaintext highlighter-rouge">y</code> that is 1  in the
-position of the first 0 from the right occuring in <code class="language-plaintext highlighter-rouge">x</code>, and 0 everywhere else.<sup id="fnref:fn-sketch" role="doc-noteref"><a href="#fn:fn-sketch" class="footnote">2</a></sup></p>
+position of the first 0 from the right occuring in <code class="language-plaintext highlighter-rouge">x</code>, and 0 everywhere else.<sup id="fnref:fn-sketch" role="doc-noteref"><a href="#fn:fn-sketch" class="footnote" rel="footnote">2</a></sup></p>
 
 <p>For example,</p>
 
